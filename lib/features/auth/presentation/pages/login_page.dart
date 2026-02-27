@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
 import 'package:path_earn_app/features/auth/presentation/controllers/login_controller.dart';
+import 'package:path_earn_app/routes/app_routes.dart';
 
 class LoginPage extends GetView<LoginController> {
   const LoginPage({super.key});
@@ -179,7 +180,7 @@ class LoginPage extends GetView<LoginController> {
                                 decoration: TextDecoration.underline,
                               ),
                               recognizer: TapGestureRecognizer()
-                                ..onTap = controller.navigateToRegister,
+                                ..onTap = () => Get.offNamed(Routes.REGISTER),
                             ),
                           ],
                         ),
