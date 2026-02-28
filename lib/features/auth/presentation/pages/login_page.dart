@@ -23,7 +23,7 @@ class LoginPage extends GetView<LoginController> {
                   height: 50.h,
                 ), // Tambahkan space di atas untuk turunkan logo
                 Image.asset(
-                  'assets/icons/ic_Logo.png',
+                  'assets/icons/icLogo.png',
                   width: 80.sp,
                   height: 80.sp,
                 ),

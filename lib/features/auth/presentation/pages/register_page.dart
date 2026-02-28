@@ -21,7 +21,7 @@ class RegisterPage extends GetView<RegisterController> {
               children: [
                 SizedBox(height: 50.h),
                 Image.asset(
-                  'assets/icons/ic_Logo.png',
+                  'assets/icons/icLogo.png',
                   width: 80.sp,
                   height: 80.sp,
                 ),

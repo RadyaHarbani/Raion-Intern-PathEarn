@@ -133,8 +133,8 @@ class RegisterController extends GetxController {
       isLoading.value = false;
     }
 
-    void navigateToLogin() {
-      // TODO : navigate to login page
-    }
+    // void navigateToLogin() {
+    //   // TODO : navigate to login page
+    // }
   }
 }

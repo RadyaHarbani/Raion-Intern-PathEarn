@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path_earn_app/routes/app_routes.dart';
 
 class SplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -33,7 +34,7 @@ class SplashController extends GetxController
 
     controller.forward().whenComplete(() {
       Future.delayed(const Duration(milliseconds: 500), () {
-        // Get.offAllNamed('/home');
+        Get.offAllNamed(Routes.ONBOARD);
       });
     });
   }

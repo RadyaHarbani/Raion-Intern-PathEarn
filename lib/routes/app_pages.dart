@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:path_earn_app/features/auth/presentation/bindings/auth_binding.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/login_page.dart';
+import 'package:path_earn_app/features/auth/presentation/pages/onboard_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/register_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/splash_page.dart';
 import 'app_routes.dart';
@@ -15,14 +16,25 @@ class AppPages {
       binding: SplashBinding(),
     ),
     GetPage(
+      name: Routes.ONBOARD,
+      page: () => OnboardPage(),
+      binding: OnboardBinding(),
+      transition: Transition.fade,
+      transitionDuration: const Duration(milliseconds: 600),
+    ),
+    GetPage(
       name: Routes.LOGIN,
       page: () => LoginPage(),
       binding: LoginBinding(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(
       name: Routes.REGISTER,
       page: () => RegisterPage(),
       binding: RegisterBinding(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
     ),
   ];
 }
