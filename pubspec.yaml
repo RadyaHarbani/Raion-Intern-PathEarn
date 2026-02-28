@@ -20,14 +20,32 @@ dependencies:
   path_provider: ^2.1.5
   flutter_screenutil: ^5.9.3
   google_fonts: ^6.3.2
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_native_splash: ^2.4.7
+  flutter_launcher_icons:
+
+flutter_native_splash:
+  android: true
+  ios: true
+  color: "#8756A1"
+  image: assets/icons/test.png
+  android_12:
+    image: assets/icons/test.png
+    icon_background_color: "#8756A1"
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/icAppLogo.png"
+  adaptive_icon_foreground: "assets/icons/icAppLogo.png"
+  adaptive_icon_background: "#8756A1"
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/icons/
     # - assets/images/
