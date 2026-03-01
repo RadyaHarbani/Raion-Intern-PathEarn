@@ -9,6 +9,8 @@ import 'package:path_earn_app/routes/app_routes.dart';
 class LoginPage extends GetView<LoginController> {
   const LoginPage({super.key});
 
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path_earn_app/features/auth/data/services/auth_service.dart';
+import 'package:path_earn_app/routes/app_routes.dart';
 
 class RegisterController extends GetxController {
   late TextEditingController emailController;
@@ -12,6 +14,8 @@ class RegisterController extends GetxController {
 
   RxString passwordError = ''.obs;
   RxString confirmPasswordError = ''.obs;
+
+  final AuthService _authService = AuthService();
 
   @override
   void onInit() {
@@ -123,10 +127,12 @@ class RegisterController extends GetxController {
     try {
       isLoading.value = true;
 
+      await _authService.signUpWithEmail(email, password);
+      Get.offAllNamed(Routes.LOGIN);
+
       await Future.delayed(Duration(seconds: 2));
 
       Get.snackbar('Sukses', 'Registrasi berhasil');
-      // TODO : navigate to login page
     } catch (e) {
       Get.snackbar('Error', 'Registrasi gagal');
     } finally {
