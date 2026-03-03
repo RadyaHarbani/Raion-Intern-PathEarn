@@ -240,6 +240,7 @@ class RegisterPage extends GetView<RegisterController> {
                       ),
                     ),
                     TextField(
+                      controller: controller.nameController,
                       decoration: InputDecoration(
                         hintText: 'Nama',
                         hintStyle: TextStyle(
