@@ -7,6 +7,8 @@ class RegisterController extends GetxController {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   late TextEditingController confirmPasswordController;
+  late TextEditingController nameController;
+  late TextEditingController dateController;
 
   RxBool isPasswordVisible = false.obs;
   RxBool isConfirmPasswordVisible = false.obs;
@@ -23,6 +25,8 @@ class RegisterController extends GetxController {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     confirmPasswordController = TextEditingController();
+    nameController = TextEditingController();
+    dateController = TextEditingController();
 
     emailController.addListener(() => update());
 
@@ -45,6 +49,8 @@ class RegisterController extends GetxController {
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
+    nameController.dispose();
+    dateController.dispose();
     super.onClose();
   }
 
@@ -127,20 +133,29 @@ class RegisterController extends GetxController {
     try {
       isLoading.value = true;
 
-      await _authService.signUpWithEmail(email, password);
+      // Daftar user ke auth supabase
+      final response = await _authService.signUpWithEmail(email, password);
+
+      // save name & birth date to user table
+      final userId = response.user?.id;
+      if (userId != null) {
+        await _authService.createUser(
+          userId: userId,
+          email: email,
+          name: nameController.text.trim(),
+          birthDate: dateController.text.trim(),
+        );
+      }
+
       Get.offAllNamed(Routes.LOGIN);
 
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(Duration(seconds: 1));
 
       Get.snackbar('Sukses', 'Registrasi berhasil');
     } catch (e) {
-      Get.snackbar('Error', 'Registrasi gagal');
+      Get.snackbar('Error', 'Registrasi gagal: $e');
     } finally {
       isLoading.value = false;
     }
-
-    // void navigateToLogin() {
-    //   // TODO : navigate to login page
-    // }
   }
 }

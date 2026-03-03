@@ -106,25 +106,6 @@ class OnboardPage extends GetView<OnboardController> {
                   },
                 ),
               ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: List.generate(pages.length, (index) {
-              //     return AnimatedContainer(
-              //       duration: const Duration(milliseconds: 300),
-              //       margin: EdgeInsets.symmetric(horizontal: 4.w),
-              //       width: page == index ? 16.w : 8.w,
-              //       height: 8.h,
-              //       decoration: BoxDecoration(
-              //         color: page == index
-              //             ? AppColors.primaryColor
-              //             : AppColors.primaryColor.withOpacity(0.3),
-              //         borderRadius: BorderRadius.circular(4.r),
-              //       ),
-              //     );
-              //   }),
-              // ),
-              // SizedBox(height: 32.h),
-              // Button
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: SizedBox(

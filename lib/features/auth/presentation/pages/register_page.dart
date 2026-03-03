@@ -9,27 +9,40 @@ import 'package:path_earn_app/features/auth/presentation/controllers/register_co
 class RegisterPage extends GetView<RegisterController> {
   const RegisterPage({super.key});
 
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1950),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      controller.dateController.text =
+          '${picked.day}/${picked.month}/${picked.year}';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: SafeArea(
-        child: Column(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(height: 50.h),
-                Image.asset(
-                  'assets/icons/icLogo.png',
-                  width: 80.sp,
-                  height: 80.sp,
-                ),
-                SizedBox(height: 40.h),
-              ],
-            ),
-            Container(
-              child: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(height: 50.h),
+                  Image.asset(
+                    'assets/icons/icLogo.png',
+                    width: 80.sp,
+                    height: 80.sp,
+                  ),
+                  SizedBox(height: 40.h),
+                ],
+              ),
+              Container(
                 margin: EdgeInsets.only(left: 20.w, right: 20.w, top: 5.h),
                 decoration: BoxDecoration(
                   color: AppColors.whiteColor,
@@ -195,7 +208,7 @@ class RegisterPage extends GetView<RegisterController> {
                     ),
                     Obx(
                       () => SizedBox(
-                        height: 61.h,
+                        height: 28.h,
                         child: controller.confirmPasswordError.value.isNotEmpty
                             ? Padding(
                                 padding: EdgeInsets.only(top: 6.h, left: 4.w),
@@ -226,6 +239,60 @@ class RegisterPage extends GetView<RegisterController> {
                             : null,
                       ),
                     ),
+                    TextField(
+                      controller: controller.nameController,
+                      decoration: InputDecoration(
+                        hintText: 'Nama',
+                        hintStyle: TextStyle(
+                          color: AppColors.greyColor,
+                          fontSize: 14.sp,
+                        ),
+                        prefixIcon: Icon(
+                          Icons.person_outline,
+                          color: AppColors.greyColor,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 16.h,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 25.h),
+                    GetBuilder<RegisterController>(
+                      builder: (controller) => TextField(
+                        controller: controller.dateController,
+                        readOnly: true,
+                        onTap: () => _selectDate(context),
+                        decoration: InputDecoration(
+                          hintText: 'Tanggal lahir',
+                          hintStyle: TextStyle(
+                            color: AppColors.greyColor,
+                            fontSize: 14.sp,
+                          ),
+                          prefixIcon: Icon(
+                            Icons.calendar_today,
+                            color: AppColors.greyColor,
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 16.h,
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                            borderSide: BorderSide.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 40.h),
                     GetBuilder<RegisterController>(
                       builder: (controller) => SizedBox(
                         width: double.infinity,
@@ -297,62 +364,62 @@ class RegisterPage extends GetView<RegisterController> {
                   ],
                 ),
               ),
-            ),
-            SizedBox(height: 40.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text: 'Dengan melanjutkan, kamu menyetujui ',
-                  style: TextStyle(
-                    fontSize: 10.sp,
-                    color: AppColors.whiteColor,
+              SizedBox(height: 40.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: 'Dengan melanjutkan, kamu menyetujui ',
+                    style: TextStyle(
+                      fontSize: 10.sp,
+                      color: AppColors.whiteColor,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: 'Syarat dan Ketentuan',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10.sp,
+                          color: AppColors.whiteColor,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {}, // TODO : buka syarat dan ketentuan
+                      ),
+                      TextSpan(
+                        text: ' ini\ndan kamu sudah diberi tahu tentang ',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10.sp,
+                          color: AppColors.whiteColor,
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'Kebijakan Privasi',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.whiteColor,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {}, // TODO : buka kebijakan privasi
+                      ),
+                      TextSpan(
+                        text: ' kami.',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.whiteColor,
+                        ),
+                      ),
+                    ],
                   ),
-                  children: [
-                    TextSpan(
-                      text: 'Syarat dan Ketentuan',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 10.sp,
-                        color: AppColors.whiteColor,
-                        decoration: TextDecoration.underline,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {}, // TODO : buka syarat dan ketentuan
-                    ),
-                    TextSpan(
-                      text: ' ini\ndan kamu sudah diberi tahu tentang ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 10.sp,
-                        color: AppColors.whiteColor,
-                      ),
-                    ),
-                    TextSpan(
-                      text: 'Kebijakan Privasi',
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.whiteColor,
-                        decoration: TextDecoration.underline,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {}, // TODO : buka kebijakan privasi
-                    ),
-                    TextSpan(
-                      text: ' kami.',
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.whiteColor,
-                      ),
-                    ),
-                  ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -27,4 +27,19 @@ class AuthService {
     final user = session?.user;
     return user?.email;
   }
+
+  // create user
+  Future<void> createUser({
+    required String userId,
+    required String email,
+    required String name,
+    required String birthDate,
+  }) async {
+    await _supabase.from('user').insert({
+      'id': userId,
+      'email': email,
+      'name': name,
+      'birth_date': birthDate,
+    });
+  }
 }
