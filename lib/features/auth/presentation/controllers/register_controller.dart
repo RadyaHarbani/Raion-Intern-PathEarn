@@ -7,6 +7,8 @@ class RegisterController extends GetxController {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   late TextEditingController confirmPasswordController;
+  late TextEditingController nameController;
+  late TextEditingController dateController;
 
   RxBool isPasswordVisible = false.obs;
   RxBool isConfirmPasswordVisible = false.obs;
@@ -23,6 +25,8 @@ class RegisterController extends GetxController {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     confirmPasswordController = TextEditingController();
+    nameController = TextEditingController();
+    dateController = TextEditingController();
 
     emailController.addListener(() => update());
 
@@ -45,6 +49,8 @@ class RegisterController extends GetxController {
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
+    nameController.dispose();
+    dateController.dispose();
     super.onClose();
   }
 
@@ -138,9 +144,5 @@ class RegisterController extends GetxController {
     } finally {
       isLoading.value = false;
     }
-
-    // void navigateToLogin() {
-    //   // TODO : navigate to login page
-    // }
   }
 }
