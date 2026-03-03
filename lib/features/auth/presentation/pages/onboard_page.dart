@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
@@ -13,20 +14,20 @@ class OnboardPage extends GetView<OnboardController> {
   Widget build(BuildContext context) {
     final List<_OnboardData> pages = [
       _OnboardData(
-        imagePath: 'assets/images/onboard1.png',
+        imagePath: 'assets/images/cuate.svg',
         title: 'Selamat Datang',
         description: 'Mulai perjalanan karirmu \nbersama PathEarn hari ini.',
         buttonLabel: 'Lanjut',
       ),
       _OnboardData(
-        imagePath: 'assets/images/onboard2.png',
+        imagePath: 'assets/images/amico.svg',
         title: 'Kuasai Skill Bisnis',
         description:
             'Tingkatkan problem-solving &\nkesiapan kerja tanpa biaya mahal.',
         buttonLabel: 'Lanjut',
       ),
       _OnboardData(
-        imagePath: 'assets/images/onboard3.png',
+        imagePath: 'assets/images/amico2.svg',
         title: 'Mulai Langkahmu!',
         description:
             'Ikuti path, kuasai skill, raih\nsertifikat & peluang karir terbaik.',
@@ -184,7 +185,9 @@ class _OnboardContent extends StatelessWidget {
           SizedBox(height: 48.h),
           SizedBox(
             height: 280.h,
-            child: Image.asset(data.imagePath, fit: BoxFit.contain),
+            child: data.imagePath.endsWith('.svg')
+                ? SvgPicture.asset(data.imagePath, fit: BoxFit.contain)
+                : Image.asset(data.imagePath, fit: BoxFit.contain),
           ),
           SizedBox(height: 100.h),
           // Dots

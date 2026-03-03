@@ -5,11 +5,12 @@ import 'package:path_earn_app/core/themes/app_theme.dart';
 import 'package:path_earn_app/routes/app_pages.dart';
 import 'package:path_earn_app/routes/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/constants/secret_const.dart';
 
 void main() async {
   await Supabase.initialize(
-    url: 'https://ljfxporhfdbqcuggblly.supabase.co',
-    anonKey: 'sb_publishable_85DLmovlxbMzSFj3za9-1A_n2iHDwb_',
+    url: SecretConst.supabaseUrl,
+    anonKey: SecretConst.supabaseAnonKey,
   );
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
