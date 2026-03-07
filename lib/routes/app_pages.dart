@@ -6,10 +6,12 @@ import 'package:path_earn_app/features/auth/presentation/pages/onboard_page.dart
 import 'package:path_earn_app/features/auth/presentation/pages/premium_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/register_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/splash_page.dart';
+import 'package:path_earn_app/features/personal-data/presentation/bindings/personal_data_binding.dart';
+import 'package:path_earn_app/features/personal-data/presentation/pages/personal_data_page.dart';
 import 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.SPLASH;
+  static const INITIAL = Routes.PERSONALDATA;
 
   static final routes = [
     GetPage(
@@ -39,7 +41,14 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 300),
     ),
     GetPage(
-      name: Routes.HOME,
+      name: Routes.PERSONALDATA,
+      page: () => PersonalDataPage(),
+      binding: PersonalDataBinding(),
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+       name: Routes.HOME,
       page: () => AuthGate()
     ),
     GetPage(
