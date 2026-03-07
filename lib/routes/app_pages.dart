@@ -8,6 +8,8 @@ import 'package:path_earn_app/features/auth/presentation/pages/register_page.dar
 import 'package:path_earn_app/features/auth/presentation/pages/splash_page.dart';
 import 'package:path_earn_app/features/personal-data/presentation/bindings/personal_data_binding.dart';
 import 'package:path_earn_app/features/personal-data/presentation/pages/personal_data_page.dart';
+import 'package:path_earn_app/features/home/presentation/bindings/home_binding.dart';
+import 'package:path_earn_app/features/home/presentation/pages/home_page.dart';
 import 'app_routes.dart';
 
 class AppPages {
@@ -47,7 +49,14 @@ class AppPages {
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),
-    GetPage(name: Routes.HOME, page: () => AuthGate()),
+    GetPage(
+      name: Routes.HOME,
+      page: () => AuthGate(),
+      binding: BindingsBuilder(() {
+        HomeBinding().dependencies();
+        LoginBinding().dependencies();
+      }),
+    ),
     GetPage(name: Routes.PREMIUM, page: () => PremiumPage()),
   ];
 }

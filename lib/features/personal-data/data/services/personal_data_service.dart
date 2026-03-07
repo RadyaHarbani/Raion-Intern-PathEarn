@@ -22,6 +22,19 @@ class PersonalDataService {
     return user?.id;
   }
 
+  Future<bool> hasPersonalData(String userId) async {
+    try {
+      final data = await _supabase
+          .from('user_documents')
+          .select('id')
+          .eq('user_id', userId)
+          .maybeSingle();
+      return data != null;
+    } catch (e) {
+      return false;
+    }
+  }
+
   Future<void> createUserDocument({
     required String userId,
     required String ijazahUrl,
