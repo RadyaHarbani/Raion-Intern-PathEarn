@@ -40,31 +40,31 @@ class AppTextStyle {
       BorderRadius.circular(responsiveSize(context, 15));
 
   /// TEXT STYLES
-  // HEADING LARGE (28)
+  // HEADING LARGE (32)
   static TextStyle tsHeadingLargeBold(BuildContext c, Color color) =>
       GoogleFonts.poppins(
-        fontSize: figmaFontsize(c, 28),
+        fontSize: figmaFontsize(c, 32),
         fontWeight: FontWeight.w700,
         color: color,
       );
 
   static TextStyle tsHeadingLargeSemibold(BuildContext c, Color color) =>
       GoogleFonts.poppins(
-        fontSize: figmaFontsize(c, 28),
+        fontSize: figmaFontsize(c, 32),
         fontWeight: FontWeight.w600,
         color: color,
       );
 
   static TextStyle tsHeadingLargeMedium(BuildContext c, Color color) =>
       GoogleFonts.poppins(
-        fontSize: figmaFontsize(c, 28),
+        fontSize: figmaFontsize(c, 32),
         fontWeight: FontWeight.w500,
         color: color,
       );
 
   static TextStyle tsHeadingLargeRegular(BuildContext c, Color color) =>
       GoogleFonts.poppins(
-        fontSize: figmaFontsize(c, 28),
+        fontSize: figmaFontsize(c, 32),
         fontWeight: FontWeight.w400,
         color: color,
       );
