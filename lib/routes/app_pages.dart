@@ -3,6 +3,7 @@ import 'package:path_earn_app/features/auth/data/services/auth_gate.dart';
 import 'package:path_earn_app/features/auth/presentation/bindings/auth_binding.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/login_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/onboard_page.dart';
+import 'package:path_earn_app/features/auth/presentation/pages/premium_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/register_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/splash_page.dart';
 import 'package:path_earn_app/features/personal-data/presentation/bindings/personal_data_binding.dart';
@@ -50,5 +51,9 @@ class AppPages {
        name: Routes.HOME,
       page: () => AuthGate()
     ),
+    GetPage(
+      name: Routes.PREMIUM,
+      page: () => PremiumPage(),
+    )
   ];
 }
