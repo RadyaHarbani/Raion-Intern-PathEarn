@@ -4,4 +4,5 @@ abstract class Routes {
   static const REGISTER = '/register';
   static const ONBOARD = '/onboard';
   static const PERSONALDATA = '/personal-data';
+  static const HOME = '/home';
 }

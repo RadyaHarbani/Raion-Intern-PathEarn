@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:path_earn_app/features/auth/data/services/auth_gate.dart';
 import 'package:path_earn_app/features/auth/presentation/bindings/auth_binding.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/login_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/onboard_page.dart';
@@ -44,6 +45,10 @@ class AppPages {
       binding: PersonalDataBinding(),
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+       name: Routes.HOME,
+      page: () => AuthGate()
     ),
   ];
 }

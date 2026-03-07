@@ -1,5 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:path_earn_app/features/auth/data/services/auth_service.dart';
+import 'package:path_earn_app/routes/app_routes.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginController extends GetxController {
   late TextEditingController emailController;
@@ -7,6 +10,8 @@ class LoginController extends GetxController {
 
   RxBool isPasswordVisible = false.obs;
   RxBool isLoading = false.obs;
+
+  final AuthService _authService = AuthService();
 
   @override
   void onInit() {
@@ -63,7 +68,6 @@ class LoginController extends GetxController {
     }
 
     if (password.length < 8) {
-      // TODO : syarat password
       Get.snackbar('Error', 'Password must be at least 8 characters');
       return;
     }
@@ -71,21 +75,19 @@ class LoginController extends GetxController {
     try {
       isLoading.value = true;
 
-      // TODO : implement login logic here (e.g., API call)
-
-      await Future.delayed(Duration(seconds: 2));
-
-      Get.snackbar('Success', 'Login successful');
-      // TODO : navigate to home page or dashboard
+      await _authService.signInWithEmail(email, password);
+      Get.snackbar('Sukses', 'Login berhasil');
+      Get.offAllNamed(Routes.HOME);
     } catch (e) {
-      Get.snackbar('Error', 'Login failed: ${e.toString()}');
+      if (e is AuthException) {
+        if (e.message.contains('Invalid login credentials')) {
+          Get.snackbar('Error', 'Invalid email or password');
+        }
+      } else {
+        Get.snackbar('Error', 'Login failed: ${e.toString()}');
+      }
     } finally {
       isLoading.value = false;
     }
-  }
-
-  void navigateToRegister() {
-    // TODO : navigate to register page
-    // Get.toNamed(Routes.REGISTER);
   }
 }

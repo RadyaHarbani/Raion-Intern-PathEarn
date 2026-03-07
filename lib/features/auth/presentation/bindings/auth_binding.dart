@@ -4,31 +4,30 @@ import 'package:path_earn_app/features/auth/presentation/controllers/onboard_con
 import 'package:path_earn_app/features/auth/presentation/controllers/register_controller.dart';
 import 'package:path_earn_app/features/auth/presentation/controllers/splash_controller.dart';
 
-
-class OnboardBinding extends Bindings{
+class OnboardBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<OnboardController>(() => OnboardController());
   }
 }
 
-class SplashBinding extends Bindings{
+class SplashBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<SplashController>(() => SplashController());
   }
 }
 
-class LoginBinding extends Bindings{
+class LoginBinding extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut<LoginController>(() => LoginController());
   }
 }
 
-class RegisterBinding extends Bindings{
+class RegisterBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<RegisterController>(() => RegisterController());
+    Get.put<RegisterController>(RegisterController());
   }
 }

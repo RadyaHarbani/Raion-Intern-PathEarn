@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path_earn_app/features/auth/data/services/auth_service.dart';
+import 'package:path_earn_app/routes/app_routes.dart';
 
 class RegisterController extends GetxController {
   late TextEditingController emailController;
   late TextEditingController passwordController;
   late TextEditingController confirmPasswordController;
+  late TextEditingController nameController;
+  late TextEditingController dateController;
 
   RxBool isPasswordVisible = false.obs;
   RxBool isConfirmPasswordVisible = false.obs;
@@ -13,12 +17,16 @@ class RegisterController extends GetxController {
   RxString passwordError = ''.obs;
   RxString confirmPasswordError = ''.obs;
 
+  final AuthService _authService = AuthService();
+
   @override
   void onInit() {
     super.onInit();
     emailController = TextEditingController();
     passwordController = TextEditingController();
     confirmPasswordController = TextEditingController();
+    nameController = TextEditingController();
+    dateController = TextEditingController();
 
     emailController.addListener(() => update());
 
@@ -41,6 +49,8 @@ class RegisterController extends GetxController {
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
+    nameController.dispose();
+    dateController.dispose();
     super.onClose();
   }
 
@@ -123,18 +133,29 @@ class RegisterController extends GetxController {
     try {
       isLoading.value = true;
 
-      await Future.delayed(Duration(seconds: 2));
+      // Daftar user ke auth supabase
+      final response = await _authService.signUpWithEmail(email, password);
+
+      // save name & birth date to user table
+      final userId = response.user?.id;
+      if (userId != null) {
+        await _authService.createUser(
+          userId: userId,
+          email: email,
+          name: nameController.text.trim(),
+          birthDate: dateController.text.trim(),
+        );
+      }
+
+      Get.offAllNamed(Routes.LOGIN);
+
+      await Future.delayed(Duration(seconds: 1));
 
       Get.snackbar('Sukses', 'Registrasi berhasil');
-      // TODO : navigate to login page
     } catch (e) {
-      Get.snackbar('Error', 'Registrasi gagal');
+      Get.snackbar('Error', 'Registrasi gagal: $e');
     } finally {
       isLoading.value = false;
     }
-
-    // void navigateToLogin() {
-    //   // TODO : navigate to login page
-    // }
   }
 }
