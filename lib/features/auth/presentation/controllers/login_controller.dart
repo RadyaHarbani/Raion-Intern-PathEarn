@@ -77,7 +77,7 @@ class LoginController extends GetxController {
 
       await _authService.signInWithEmail(email, password);
       Get.snackbar('Sukses', 'Login berhasil');
-      Get.offAllNamed(Routes.HOME);
+      Get.offAllNamed(Routes.PERSONALDATA);
     } catch (e) {
       if (e is AuthException) {
         if (e.message.contains('Invalid login credentials')) {

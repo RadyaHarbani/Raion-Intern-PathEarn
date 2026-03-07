@@ -11,7 +11,7 @@ import 'package:path_earn_app/features/personal-data/presentation/pages/personal
 import 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.PERSONALDATA;
+  static const INITIAL = Routes.SPLASH;
 
   static final routes = [
     GetPage(
@@ -47,13 +47,7 @@ class AppPages {
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),
-    GetPage(
-       name: Routes.HOME,
-      page: () => AuthGate()
-    ),
-    GetPage(
-      name: Routes.PREMIUM,
-      page: () => PremiumPage(),
-    )
+    GetPage(name: Routes.HOME, page: () => AuthGate()),
+    GetPage(name: Routes.PREMIUM, page: () => PremiumPage()),
   ];
 }
