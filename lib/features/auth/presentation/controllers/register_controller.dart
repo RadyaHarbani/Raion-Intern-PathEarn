@@ -145,9 +145,11 @@ class RegisterController extends GetxController {
           name: nameController.text.trim(),
           birthDate: dateController.text.trim(),
         );
+
+        Get.offAllNamed(Routes.LOGIN);
       }
 
-      Get.offAllNamed(Routes.LOGIN);
+      
 
       await Future.delayed(Duration(seconds: 1));
 
