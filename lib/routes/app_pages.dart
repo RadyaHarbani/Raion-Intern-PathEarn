@@ -12,6 +12,8 @@ import 'app_routes.dart';
 
 class AppPages {
   static const INITIAL = Routes.PERSONALDATA;
+  /// TODO: TESTING
+  static const PREMIUM = Routes.PREMIUM;
 
   static final routes = [
     GetPage(
@@ -47,13 +49,7 @@ class AppPages {
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),
-    GetPage(
-       name: Routes.HOME,
-      page: () => AuthGate()
-    ),
-    GetPage(
-      name: Routes.PREMIUM,
-      page: () => PremiumPage(),
-    )
+    GetPage(name: Routes.HOME, page: () => AuthGate()),
+    GetPage(name: Routes.PREMIUM, page: () => PremiumPage()),
   ];
 }

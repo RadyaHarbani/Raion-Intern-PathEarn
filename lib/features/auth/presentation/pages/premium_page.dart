@@ -42,6 +42,7 @@ class PremiumPage extends StatelessWidget {
                       gradientColors: [Color(0xFFFFA800), Color(0xFFFAE653)],
                       price: '29.000/Bulan',
                       border: Border.all(color: Color(0xFFBCA605), width: 2),
+                      imagePath: 'assets/images/prem_card1.svg',
                     ),
                     const SizedBox(height: 24),
                     _buildPremiumCard(
@@ -49,6 +50,7 @@ class PremiumPage extends StatelessWidget {
                       gradientColors: [Color(0xFF8D5293), Color(0xFFCD93D8)],
                       price: '280.000/3 Bulan',
                       border: Border.all(color: Color(0xFF8F05BC), width: 2),
+                      imagePath: 'assets/images/prem_card2.svg',
                     ),
                     const SizedBox(height: 24),
                     Text(
@@ -76,7 +78,7 @@ class PremiumPage extends StatelessWidget {
         top: MediaQuery.of(context).padding.top + 16,
         left: 24,
         right: 0,
-        bottom: 24,
+        bottom: 25,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -104,7 +106,7 @@ class PremiumPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Ke Level\nProfesional!',
+                  'Ke Level Profesional!',
                   style: AppTextStyle.tsHeadingLargeBold(
                     context,
                     AppColors.whiteColor,
@@ -118,7 +120,7 @@ class PremiumPage extends StatelessWidget {
             offset: const Offset(0, 29),
             child: SvgPicture.asset(
               'assets/images/premium_page.svg',
-              height: 190,
+              height: 180,
               fit: BoxFit.contain,
             ),
           ),
@@ -132,6 +134,7 @@ class PremiumPage extends StatelessWidget {
     required List<Color> gradientColors,
     required String price,
     Border? border,
+    String? imagePath,
   }) {
     final features = [
       'Unlimited Battery',
@@ -150,61 +153,80 @@ class PremiumPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: border,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          Text(
-            'Premium',
-            style: AppTextStyle.tsTitleLargeBold(context, AppColors.whiteColor),
-          ),
-          const SizedBox(height: 20),
-          // feature list
-          ...features.map(
-            (features) => Padding(
-              padding: const EdgeInsets.only(bottom: 6),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.check,
-                    color: AppColors.whiteColor,
-                    size: 18,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Premium',
+                style: AppTextStyle.tsTitleLargeBold(
+                  context,
+                  AppColors.whiteColor,
+                ),
+              ),
+              const SizedBox(height: 20),
+              // feature list
+              ...features.map(
+                (features) => Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.check,
+                        color: AppColors.whiteColor,
+                        size: 18,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        features,
+                        style: AppTextStyle.tsBodyMediumBold(
+                          context,
+                          AppColors.whiteColor,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 8),
-                  Text(
-                    features,
-                    style: AppTextStyle.tsBodyMediumBold(
-                      context,
-                      AppColors.whiteColor,
+                ),
+              ),
+              const SizedBox(height: 23),
+              //price button
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.whiteColor,
+                    foregroundColor: AppColors.primaryColor,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 23),
-          //price button
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.whiteColor,
-                foregroundColor: AppColors.primaryColor,
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  child: Text(
+                    price,
+                    style: AppTextStyle.tsBodyLargeBold(
+                      context,
+                      AppColors.primaryColor,
+                    ),
+                  ),
                 ),
               ),
-              child: Text(
-                price,
-                style: AppTextStyle.tsBodyLargeBold(
-                  context,
-                  AppColors.primaryColor,
-                ),
+            ],
+          ),
+          if (imagePath != null)
+            Positioned(
+              right: -12,
+              top: -20,
+              bottom: 48,
+              child: SvgPicture.asset(
+                imagePath,
+                width: 122,
+                fit: BoxFit.contain,
               ),
             ),
-          ),
         ],
       ),
     );
