@@ -26,6 +26,11 @@ class PersonalDataController extends GetxController {
     yearController = TextEditingController();
     educationController = TextEditingController();
     majorController = TextEditingController();
+
+    // Listen to changes to update UI
+    yearController.addListener(() => update());
+    educationController.addListener(() => update());
+    majorController.addListener(() => update());
   }
 
   void pickCertificationFile() async {
@@ -35,6 +40,7 @@ class PersonalDataController extends GetxController {
     );
     if (result != null) {
       selectedCertificationFile.value = File(result.files.single.path!);
+      update(); // Update UI
     }
   }
 
@@ -45,6 +51,7 @@ class PersonalDataController extends GetxController {
     );
     if (result != null) {
       selectedCvFile.value = File(result.files.single.path!);
+      update(); // Update UI
     }
   }
 
@@ -81,7 +88,6 @@ class PersonalDataController extends GetxController {
 
     try {
       isLoading.value = true;
-
 
       final currentUserId = userId.value;
       if (currentUserId.isNotEmpty) {
