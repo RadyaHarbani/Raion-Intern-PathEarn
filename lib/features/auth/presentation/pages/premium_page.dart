@@ -50,6 +50,16 @@ class PremiumPage extends StatelessWidget {
                       price: '280.000/3 Bulan',
                       border: Border.all(color: Color(0xFF8F05BC), width: 2),
                     ),
+                    const SizedBox(height: 24),
+                    Text(
+                      'Yuk Premiumkan Akunmu!',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
                   ],
                 ),
               ),
