@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:path_earn_app/features/auth/data/services/auth_service.dart';
+import 'package:path_earn_app/features/personal-data/data/services/personal_data_service.dart';
 import 'package:path_earn_app/routes/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -12,6 +13,7 @@ class LoginController extends GetxController {
   RxBool isLoading = false.obs;
 
   final AuthService _authService = AuthService();
+  final PersonalDataService _personalDataService = PersonalDataService();
 
   @override
   void onInit() {
@@ -32,8 +34,8 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
+    // emailController.dispose();
+    // passwordController.dispose();
     super.onClose();
   }
 
@@ -75,9 +77,20 @@ class LoginController extends GetxController {
     try {
       isLoading.value = true;
 
-      await _authService.signInWithEmail(email, password);
-      Get.snackbar('Sukses', 'Login berhasil');
-      Get.offAllNamed(Routes.HOME);
+      final response = await _authService.signInWithEmail(email, password);
+
+      if (response.user != null) {
+        final userId = response.user!.id;
+        final hasData = await _personalDataService.hasPersonalData(userId);
+
+        if (hasData) {
+          Get.offAllNamed(Routes.HOME);
+        } else {
+          Get.offAllNamed(Routes.PERSONALDATA);
+        }
+
+        Get.snackbar('Sukses', 'Login berhasil');
+      }
     } catch (e) {
       if (e is AuthException) {
         if (e.message.contains('Invalid login credentials')) {

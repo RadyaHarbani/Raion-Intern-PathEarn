@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path_earn_app/features/personal-data/data/services/personal_data_service.dart';
 import 'package:path_earn_app/routes/app_routes.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -8,6 +10,7 @@ class SplashController extends GetxController
 
   late Animation<double> logoOpacity;
   late Animation<double> textOpacity;
+  final PersonalDataService _personalDataService = PersonalDataService();
 
   @override
   void onInit() {
@@ -33,10 +36,26 @@ class SplashController extends GetxController
     );
 
     controller.forward().whenComplete(() {
-      Future.delayed(const Duration(milliseconds: 500), () {
-        Get.offAllNamed(Routes.ONBOARD);
+      Future.delayed(const Duration(milliseconds: 500), () async {
+        await _checkAuthAndNavigate();
       });
     });
+  }
+
+  Future<void> _checkAuthAndNavigate() async {
+    final session = Supabase.instance.client.auth.currentSession;
+    if (session != null) {
+      final userId = session.user.id;
+      final hasData = await _personalDataService.hasPersonalData(userId);
+
+      if (hasData) {
+        Get.offAllNamed(Routes.HOME);
+      } else {
+        Get.offAllNamed(Routes.PERSONALDATA);
+      }
+    } else {
+      Get.offAllNamed(Routes.ONBOARD);
+    }
   }
 
   @override

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -90,11 +92,13 @@ class PersonalDataPage extends GetView<PersonalDataController> {
                     _UploadField(
                       label: 'Soft Copy Ijazah',
                       onTap: controller.pickCertificationFile,
+                      selectedFile: controller.selectedCertificationFile,
                     ),
                     SizedBox(height: 16.h),
                     _UploadField(
                       label: 'Curriculum Vitae(CV)',
                       onTap: controller.pickCvFile,
+                      selectedFile: controller.selectedCvFile,
                     ),
                   ],
                 ),
@@ -102,24 +106,45 @@ class PersonalDataPage extends GetView<PersonalDataController> {
                 SizedBox(height: 40.h),
 
                 /// Button Lanjut
-                SizedBox(
-                  width: double.infinity,
-                  height: 50.h,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.whiteColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.r),
+                GetBuilder<PersonalDataController>(
+                  builder: (controller) => SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed:
+                          (controller.yearController.text.isEmpty ||
+                              controller.educationController.text.isEmpty ||
+                              controller.majorController.text.isEmpty ||
+                              controller.selectedCertificationFile.value ==
+                                  null ||
+                              controller.selectedCvFile.value == null)
+                          ? null
+                          : () => controller.registerPersonalData(),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primaryColor,
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                        disabledBackgroundColor: AppColors.primaryColor,
                       ),
-                      elevation: 0,
-                    ),
-                    onPressed: () {},
-                    child: Text(
-                      'Lanjut',
-                      style: AppTextStyle.tsBodyMediumSemibold(
-                        context,
-                        AppColors.primaryColor,
-                      ),
+                      child: controller.isLoading.value
+                          ? SizedBox(
+                              height: 20.h,
+                              width: 20.h,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.greyColor,
+                                ),
+                              ),
+                            )
+                          : Text(
+                              'Daftar',
+                              style: TextStyle(
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.whiteColor,
+                              ),
+                            ),
                     ),
                   ),
                 ),
@@ -250,8 +275,13 @@ class _InputField extends StatelessWidget {
 class _UploadField extends StatelessWidget {
   final String label;
   final VoidCallback onTap;
+  final Rx<File?> selectedFile;
 
-  const _UploadField({required this.label, required this.onTap});
+  const _UploadField({
+    required this.label,
+    required this.onTap,
+    required this.selectedFile,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -265,33 +295,51 @@ class _UploadField extends StatelessWidget {
         SizedBox(height: 8.h),
         GestureDetector(
           onTap: onTap,
-          child: Container(
-            height: 50.h,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade500,
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: Center(
+          child: Obx(() {
+            final file = selectedFile.value;
+            final isFileSelected = file != null;
+
+            return Container(
+              height: 50.h,
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              decoration: BoxDecoration(
+                color: isFileSelected
+                    ? AppColors.whiteColor
+                    : Colors.grey.shade500,
+                borderRadius: BorderRadius.circular(12.r),
+                border: isFileSelected
+                    ? Border.all(color: AppColors.primaryColor)
+                    : null,
+              ),
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.cloud_upload_outlined,
-                    color: Colors.white,
+                    isFileSelected
+                        ? Icons.check_circle_outline
+                        : Icons.cloud_upload_outlined,
+                    color: isFileSelected
+                        ? AppColors.primaryColor
+                        : Colors.white,
                     size: 18.sp,
                   ),
                   SizedBox(width: 8.w),
-                  Text(
-                    'Unggah Media',
-                    style: AppTextStyle.tsBodySmallSemibold(
-                      context,
-                      Colors.white,
+                  Flexible(
+                    child: Text(
+                      isFileSelected
+                          ? file.path.split(Platform.pathSeparator).last
+                          : 'Unggah Media',
+                      style: AppTextStyle.tsBodySmallSemibold(
+                        context,
+                        isFileSelected ? AppColors.primaryColor : Colors.white,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
               ),
-            ),
-          ),
+            );
+          }),
         ),
       ],
     );

@@ -8,12 +8,18 @@ import 'package:path_earn_app/features/auth/presentation/pages/register_page.dar
 import 'package:path_earn_app/features/auth/presentation/pages/splash_page.dart';
 import 'package:path_earn_app/features/personal-data/presentation/bindings/personal_data_binding.dart';
 import 'package:path_earn_app/features/personal-data/presentation/pages/personal_data_page.dart';
+import 'package:path_earn_app/features/home/presentation/bindings/home_binding.dart';
+import 'package:path_earn_app/features/home/presentation/pages/home_page.dart';
 import 'app_routes.dart';
 
 class AppPages {
+<<<<<<< HEAD
   static const INITIAL = Routes.PERSONALDATA;
   /// TODO: TESTING
   static const PREMIUM = Routes.PREMIUM;
+=======
+  static const INITIAL = Routes.SPLASH;
+>>>>>>> 450cd38a97bc3bc521ff3ecb1d4fae7dd5d3b89c
 
   static final routes = [
     GetPage(
@@ -49,7 +55,18 @@ class AppPages {
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),
+<<<<<<< HEAD
     GetPage(name: Routes.HOME, page: () => AuthGate()),
+=======
+    GetPage(
+      name: Routes.HOME,
+      page: () => AuthGate(),
+      binding: BindingsBuilder(() {
+        HomeBinding().dependencies();
+        LoginBinding().dependencies();
+      }),
+    ),
+>>>>>>> 450cd38a97bc3bc521ff3ecb1d4fae7dd5d3b89c
     GetPage(name: Routes.PREMIUM, page: () => PremiumPage()),
   ];
 }

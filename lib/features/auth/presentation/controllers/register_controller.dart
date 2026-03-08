@@ -145,9 +145,9 @@ class RegisterController extends GetxController {
           name: nameController.text.trim(),
           birthDate: dateController.text.trim(),
         );
-      }
 
-      Get.offAllNamed(Routes.LOGIN);
+        Get.offAllNamed(Routes.PERSONALDATA, arguments: {'userId': userId});
+      }
 
       await Future.delayed(Duration(seconds: 1));
 

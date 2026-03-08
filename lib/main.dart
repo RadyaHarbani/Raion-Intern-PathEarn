@@ -3,14 +3,13 @@ import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path_earn_app/core/themes/app_theme.dart';
 import 'package:path_earn_app/routes/app_pages.dart';
-import 'package:path_earn_app/routes/app_routes.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'core/constants/secret_const.dart';
+// import 'core/constants/secret_const.dart';
 
 void main() async {
   await Supabase.initialize(
-    url: SecretConst.supabaseUrl,
-    anonKey: SecretConst.supabaseAnonKey,
+    url: 'https://ljfxporhfdbqcuggblly.supabase.co',
+    anonKey: 'sb_publishable_85DLmovlxbMzSFj3za9-1A_n2iHDwb_',
   );
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
