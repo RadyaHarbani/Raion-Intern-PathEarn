@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-class LmsController extends GetxController {
+class StageController extends GetxController {
   // Add any necessary state variables here
   
   @override

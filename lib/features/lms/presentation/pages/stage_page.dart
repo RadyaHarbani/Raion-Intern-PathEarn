@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
-import '../controllers/lms_controller.dart';
+import '../controllers/stage_controller.dart';
 
-class LmsPage extends GetView<LmsController> {
-  const LmsPage({super.key});
+class StagePage extends GetView<StageController> {
+  const StagePage({super.key});
 
   @override
   Widget build(BuildContext context) {
