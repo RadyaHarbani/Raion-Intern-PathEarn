@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
 import 'package:path_earn_app/core/constants/app_text_style.dart';
-
 import 'package:path_earn_app/core/widgets/app_drawer.dart';
 
 class PremiumPage extends StatelessWidget {
@@ -102,10 +101,9 @@ Widget _buildHeader(BuildContext context) {
                 },
                 child: CircleAvatar(
                   radius: 26,
-                  backgroundColor: AppColors.whiteColor.withOpacity(0.3),
+                  backgroundColor: AppColors.whiteColor.withValues(alpha: 0.3),
                   child: const Icon(
-                    Icons
-                        .menu, // Changed to menu icon for clearer navigation intent
+                    Icons.menu,
                     color: AppColors.whiteColor,
                     size: 30,
                   ),
@@ -176,14 +174,14 @@ Widget _buildPremiumCard({
         const SizedBox(height: 20),
         // feature list
         ...features.map(
-          (features) => Padding(
+          (feature) => Padding(
             padding: const EdgeInsets.only(bottom: 6),
             child: Row(
               children: [
                 const Icon(Icons.check, color: AppColors.whiteColor, size: 18),
                 const SizedBox(width: 8),
                 Text(
-                  features,
+                  feature,
                   style: AppTextStyle.tsBodyMediumBold(
                     context,
                     AppColors.whiteColor,
@@ -194,7 +192,7 @@ Widget _buildPremiumCard({
           ),
         ),
         const SizedBox(height: 23),
-        //price button
+        // price button
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
