@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           themeMode: ThemeMode.system,
           // initialBinding: InitialBinding(),
           // TESTING SLICING PAGE
-          initialRoute: AppPages.QUIZ,
+          initialRoute: AppPages.INITIAL,
           getPages: AppPages.routes,
         );
       },

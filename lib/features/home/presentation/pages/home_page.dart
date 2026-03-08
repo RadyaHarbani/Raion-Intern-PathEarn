@@ -223,7 +223,7 @@ class HomePage extends GetView<HomeController> {
     return GestureDetector(
       onTap: () {
         if (!isLocked) {
-          Get.toNamed(Routes.LMS);
+          Get.toNamed(Routes.STAGE);
         }
       },
       child: Container(
