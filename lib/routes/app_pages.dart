@@ -1,25 +1,24 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:path_earn_app/features/auth/data/services/auth_gate.dart';
 import 'package:path_earn_app/features/auth/presentation/bindings/auth_binding.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/login_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/onboard_page.dart';
-import 'package:path_earn_app/features/auth/presentation/pages/premium_page.dart';
+import 'package:path_earn_app/features/premium/presentation/pages/premium_page.dart';
+import 'package:path_earn_app/features/quiz/presentation/pages/quiz_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/register_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/splash_page.dart';
 import 'package:path_earn_app/features/personal-data/presentation/bindings/personal_data_binding.dart';
 import 'package:path_earn_app/features/personal-data/presentation/pages/personal_data_page.dart';
 import 'package:path_earn_app/features/home/presentation/bindings/home_binding.dart';
 import 'package:path_earn_app/features/home/presentation/pages/home_page.dart';
+import 'package:path_earn_app/features/quiz/presentation/pages/score_page.dart';
 import 'app_routes.dart';
 
 class AppPages {
-<<<<<<< HEAD
-  static const INITIAL = Routes.PERSONALDATA;
-  /// TODO: TESTING
-  static const PREMIUM = Routes.PREMIUM;
-=======
   static const INITIAL = Routes.SPLASH;
->>>>>>> 450cd38a97bc3bc521ff3ecb1d4fae7dd5d3b89c
+  // testing
+  static const QUIZ = Routes.QUIZ;
 
   static final routes = [
     GetPage(
@@ -55,9 +54,6 @@ class AppPages {
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 300),
     ),
-<<<<<<< HEAD
-    GetPage(name: Routes.HOME, page: () => AuthGate()),
-=======
     GetPage(
       name: Routes.HOME,
       page: () => AuthGate(),
@@ -66,7 +62,8 @@ class AppPages {
         LoginBinding().dependencies();
       }),
     ),
->>>>>>> 450cd38a97bc3bc521ff3ecb1d4fae7dd5d3b89c
     GetPage(name: Routes.PREMIUM, page: () => PremiumPage()),
+    GetPage(name: Routes.QUIZ, page: () => QuizPage()),
+    GetPage(name: Routes.SCORE, page: () => ScorePage()),
   ];
 }
