@@ -1,9 +1,13 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
-import 'package:path_earn_app/routes/app_routes.dart';
+import 'package:path_earn_app/core/constants/app_text_style.dart';
 import 'package:path_earn_app/core/widgets/app_drawer.dart';
+import 'package:path_earn_app/routes/app_routes.dart';
 import '../controllers/home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -45,14 +49,14 @@ class HomePage extends GetView<HomeController> {
                   ),
                   // Battery Slider
                   Container(
-                    width: 220.w,
-                    height: 36.h,
+                    width: 265.w,
+                    height: 30.h,
                     decoration: BoxDecoration(
                       color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(20.r),
+                      borderRadius: BorderRadius.circular(10.r),
                     ),
                     padding: EdgeInsets.symmetric(
-                      horizontal: 4.w,
+                      horizontal: 10.w,
                       vertical: 4.h,
                     ),
                     child: Row(
@@ -102,10 +106,14 @@ class HomePage extends GetView<HomeController> {
                           ),
                         ),
                         SizedBox(width: 8.w),
-                        Icon(
-                          Icons.bolt,
-                          color: AppColors.secondaryColor,
-                          size: 24.sp,
+                        Transform.rotate(
+                          angle: 90 * math.pi / 180,
+                          child: Icon(
+                            Icons.battery_full_rounded,
+
+                            color: AppColors.secondaryColor,
+                            size: 30.sp,
+                          ),
                         ),
                       ],
                     ),
@@ -117,17 +125,16 @@ class HomePage extends GetView<HomeController> {
               // 2. Greeting Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         "Hi",
-                        style: TextStyle(
-                          fontSize: 28.sp,
-                          color: AppColors.primaryColor,
-                          fontWeight: FontWeight.w500,
+                        style: AppTextStyle.tsHeadingMediumRegular(
+                          context,
+                          AppColors.primaryColor,
                         ),
                       ),
                       Obx(
@@ -143,25 +150,18 @@ class HomePage extends GetView<HomeController> {
                     ],
                   ),
                   // Badge Placeholder
-                  Container(
-                    width: 70.w,
-                    height: 70.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey[300], // Placeholder
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.verified,
-                      color: AppColors.greyColor,
-                      size: 36.sp,
-                    ),
+                  Obx(
+                    () => controller.isPremium.value
+                        ? SvgPicture.asset(
+                            "assets/images/premiumBadge.svg",
+                            height: 80.h,
+                            width: 80.w,
+                          )
+                        : SvgPicture.asset(
+                            "assets/images/unpremiumBadge.svg",
+                            height: 80.h,
+                            width: 80.w,
+                          ), // Empty placeholder for alignment
                   ),
                 ],
               ),
@@ -207,6 +207,7 @@ class HomePage extends GetView<HomeController> {
                   textColor: Colors.white,
                   progressColor: AppColors.secondaryColor,
                   isLocked: controller.studyLocked.value,
+                  stageId: controller.studyStageId.value,
                 ),
               ),
               SizedBox(height: 16.h),
@@ -220,6 +221,7 @@ class HomePage extends GetView<HomeController> {
                   textColor: Colors.white,
                   progressColor: Colors.grey[300]!,
                   isLocked: controller.trainingLocked.value,
+                  stageId: controller.trainingStageId.value,
                 ),
               ),
               SizedBox(height: 16.h),
@@ -229,10 +231,11 @@ class HomePage extends GetView<HomeController> {
                   stage: controller.contributeStage.value,
                   status: controller.contributeStatus.value,
                   progress: controller.contributeProgress.value,
-                  backgroundColor: const Color(0xFF555555), // Darker grey
+                  backgroundColor: const Color(0xFF555555),
                   textColor: Colors.white,
                   progressColor: Colors.grey[400]!,
                   isLocked: controller.contributeLocked.value,
+                  stageId: controller.contributeStageId.value,
                 ),
               ),
               SizedBox(height: 20.h),
@@ -252,114 +255,144 @@ class HomePage extends GetView<HomeController> {
     required Color textColor,
     required Color progressColor,
     required bool isLocked,
+    required String stageId,
   }) {
-    return Container(
-      width: double.infinity,
-      height: 180.h,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(16.r),
-      ),
-      child: Stack(
-        children: [
-          // Content
-          Padding(
-            padding: EdgeInsets.all(20.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 28.sp,
-                    fontWeight: FontWeight.bold,
-                    color: textColor,
-                    height: 1.1,
+    return GestureDetector(
+      onTap: () {
+        if (!isLocked) {
+          Get.toNamed(Routes.STAGE, arguments: {'stage_id': stageId});
+        }
+      },
+      child: Container(
+        width: double.infinity,
+        height: 190.h,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        child: Stack(
+          children: [
+            // Illustration Placeholder (Right side)
+            Positioned(
+              right: 0,
+              top: 0,
+              child: SvgPicture.asset("assets/images/studyPath.svg"),
+            ),
+
+            // Content
+            Positioned(
+              bottom: 0,
+              child: Container(
+                width: 340.w,
+
+                decoration: BoxDecoration(
+                  color: Color.alphaBlend(
+                    Colors.black.withOpacity(0.3),
+                    AppColors.primaryColor,
+                  ),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(16.r),
+                    bottomRight: Radius.circular(16.r),
                   ),
                 ),
-                const Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      stage,
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: textColor,
-                      ),
-                    ),
-                    Text(
-                      status,
-                      style: TextStyle(fontSize: 12.sp, color: textColor),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 8.h),
-                // Progress Bar
-                Container(
-                  height: 16.h,
-                  decoration: BoxDecoration(
-                    color: Colors.black12,
-                    borderRadius: BorderRadius.circular(10.r),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 12.h,
                   ),
-                  child: Stack(
+                  child: Column(
                     children: [
-                      if (progress > 0)
-                        FractionallySizedBox(
-                          widthFactor: progress,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: progressColor,
-                              borderRadius: BorderRadius.circular(10.r),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            stage,
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.bold,
+                              color: textColor,
                             ),
                           ),
-                        ),
-                      Center(
-                        child: Text(
-                          "${(progress * 100).toInt()}%",
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.bold,
-                            color: progress > 0
-                                ? AppColors.primaryColor
-                                : textColor,
+                          Text(
+                            status,
+                            style: TextStyle(fontSize: 12.sp, color: textColor),
                           ),
+                        ],
+                      ),
+                      SizedBox(height: 8.h),
+                      // Progress Bar
+                      Container(
+                        height: 18.h,
+                        decoration: BoxDecoration(
+                          color: Color.alphaBlend(
+                            AppColors.primaryColor.withOpacity(0.3),
+                            AppColors.whiteColor,
+                          ),
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        child: Stack(
+                          children: [
+                            if (progress > 0)
+                              FractionallySizedBox(
+                                widthFactor: progress,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: progressColor,
+                                    borderRadius: BorderRadius.circular(10.r),
+                                  ),
+                                ),
+                              ),
+                            Center(
+                              child: Text(
+                                "${(progress * 100).toInt()}%",
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: progress > 0
+                                      ? AppColors.primaryColor
+                                      : textColor,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
-          // Illustration Placeholder (Right side)
-          Positioned(
-            right: 20.w,
-            top: 20.h,
-            child: Container(
-              width: 80.w,
-              height: 80.w,
-              // color: Colors.white24, // Placeholder
-            ),
-          ),
-          // Lock Overlay
-          if (isLocked)
-            Center(
-              child: Container(
-                padding: EdgeInsets.all(16.w),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.6),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.lock_outline,
-                  color: Colors.black87,
-                  size: 32.sp,
+            Padding(
+              padding: EdgeInsets.all(20.w),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 28.sp,
+                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                  height: 1.1,
                 ),
               ),
             ),
-        ],
+
+            // Lock Overlay
+            if (isLocked)
+              Center(
+                child: Container(
+                  padding: EdgeInsets.all(16.w),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.6),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.lock_outline,
+                    color: Colors.black87,
+                    size: 32.sp,
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }
