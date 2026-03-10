@@ -70,19 +70,28 @@ class HomePage extends GetView<HomeController> {
                               // Progress Bar Fill
                               LayoutBuilder(
                                 builder: (context, constraints) {
-                                  return Container(
-                                    width: constraints.maxWidth * 1.0, // 5/5
-                                    decoration: BoxDecoration(
-                                      color: AppColors.secondaryColor,
-                                      borderRadius: BorderRadius.circular(20.r),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "5/5",
-                                        style: TextStyle(
-                                          color: AppColors.primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14.sp,
+                                  return Obx(
+                                    () => Container(
+                                      width:
+                                          constraints.maxWidth *
+                                          (controller.energy.value /
+                                              controller.maxEnergy),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.secondaryColor,
+                                        borderRadius: BorderRadius.circular(
+                                          20.r,
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Obx(
+                                          () => Text(
+                                            "${controller.energy.value}/${controller.maxEnergy}",
+                                            style: TextStyle(
+                                              color: AppColors.primaryColor,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14.sp,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -121,12 +130,14 @@ class HomePage extends GetView<HomeController> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Text(
-                        "Alya Putri!",
-                        style: TextStyle(
-                          fontSize: 32.sp,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primaryColor,
+                      Obx(
+                        () => Text(
+                          "${controller.userName.value}!",
+                          style: TextStyle(
+                            fontSize: 32.sp,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primaryColor,
+                          ),
                         ),
                       ),
                     ],
@@ -186,37 +197,43 @@ class HomePage extends GetView<HomeController> {
               SizedBox(height: 32.h),
 
               // 4. Stages Section
-              _buildStageCard(
-                title: "Study\nPath",
-                stage: "Stage 1",
-                status: "Sedang Berjalan",
-                progress: 0.7,
-                backgroundColor: AppColors.primaryColor,
-                textColor: Colors.white,
-                progressColor: AppColors.secondaryColor,
-                isLocked: false,
+              Obx(
+                () => _buildStageCard(
+                  title: "Study\nPath",
+                  stage: controller.studyStage.value,
+                  status: controller.studyStatus.value,
+                  progress: controller.studyProgress.value,
+                  backgroundColor: AppColors.primaryColor,
+                  textColor: Colors.white,
+                  progressColor: AppColors.secondaryColor,
+                  isLocked: controller.studyLocked.value,
+                ),
               ),
               SizedBox(height: 16.h),
-              _buildStageCard(
-                title: "Training\nPath",
-                stage: "Stage 2",
-                status: "Belum Dimulai",
-                progress: 0.0,
-                backgroundColor: AppColors.greyColor,
-                textColor: Colors.white,
-                progressColor: Colors.grey[300]!,
-                isLocked: true,
+              Obx(
+                () => _buildStageCard(
+                  title: "Training\nPath",
+                  stage: controller.trainingStage.value,
+                  status: controller.trainingStatus.value,
+                  progress: controller.trainingProgress.value,
+                  backgroundColor: AppColors.greyColor,
+                  textColor: Colors.white,
+                  progressColor: Colors.grey[300]!,
+                  isLocked: controller.trainingLocked.value,
+                ),
               ),
               SizedBox(height: 16.h),
-              _buildStageCard(
-                title: "Contribute\nPath",
-                stage: "Stage 1",
-                status: "Belum Dimulai",
-                progress: 0.0,
-                backgroundColor: const Color(0xFF555555), // Darker grey
-                textColor: Colors.white,
-                progressColor: Colors.grey[400]!,
-                isLocked: true,
+              Obx(
+                () => _buildStageCard(
+                  title: "Contribute\nPath",
+                  stage: controller.contributeStage.value,
+                  status: controller.contributeStatus.value,
+                  progress: controller.contributeProgress.value,
+                  backgroundColor: const Color(0xFF555555), // Darker grey
+                  textColor: Colors.white,
+                  progressColor: Colors.grey[400]!,
+                  isLocked: controller.contributeLocked.value,
+                ),
               ),
               SizedBox(height: 20.h),
             ],

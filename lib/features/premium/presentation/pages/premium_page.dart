@@ -117,11 +117,31 @@ Widget _buildHeader(BuildContext context) {
                   AppColors.whiteColor,
                 ),
               ),
-              Text(
-                'Ke Level\nProfesional!',
-                style: AppTextStyle.tsHeadingLargeBold(
-                  context,
-                  AppColors.whiteColor,
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Ke Level',
+                      style: AppTextStyle.tsHeadingLargeBold(
+                        context,
+                        AppColors.whiteColor,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '\nProfesional',
+                      style: AppTextStyle.tsHeadingLargeBold(
+                        context,
+                        AppColors.whiteColor,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '!',
+                      style: AppTextStyle.tsHeadingLargeBold(
+                        context,
+                        AppColors.whiteColor,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -129,7 +149,7 @@ Widget _buildHeader(BuildContext context) {
         ),
         // Kanan: gambar SVG
         Transform.translate(
-          offset: const Offset(0, 29),
+          offset: const Offset(20, 29),
           child: SvgPicture.asset(
             'assets/images/premium_page.svg',
             height: 190,

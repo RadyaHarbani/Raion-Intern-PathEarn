@@ -17,8 +17,6 @@ import 'app_routes.dart';
 
 class AppPages {
   static const INITIAL = Routes.SPLASH;
-  // testing
-  static const QUIZ = Routes.QUIZ;
 
   static final routes = [
     GetPage(

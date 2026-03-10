@@ -28,6 +28,13 @@ class AuthService {
     return user?.email;
   }
 
+  // Get User ID (UUID)
+  String? getCurrentUserId() {
+    final session = _supabase.auth.currentSession;
+    final user = session?.user;
+    return user?.id;
+  }
+
   // create user
   Future<void> createUser({
     required String userId,
