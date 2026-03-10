@@ -19,7 +19,7 @@ import 'package:path_earn_app/features/home/presentation/bindings/home_binding.d
 import 'app_routes.dart';
 
 class AppPages {
-  static const INITIAL = Routes.STAGE;
+  static const INITIAL = Routes.SPLASH;
 
   static final routes = [
     GetPage(
