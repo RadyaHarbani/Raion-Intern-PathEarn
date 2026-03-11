@@ -35,6 +35,7 @@ class HomePage extends GetView<HomeController> {
                       return GestureDetector(
                         onTap: () {
                           Scaffold.of(context).openDrawer();
+                          // Get.toNamed(Routes.PROFILE);
                         },
                         child: Container(
                           width: 48.w,

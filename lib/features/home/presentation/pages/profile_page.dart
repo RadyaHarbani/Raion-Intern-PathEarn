@@ -1,26 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:get/state_manager.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
+import 'package:path_earn_app/routes/app_routes.dart';
+import '../controllers/profile_controller.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends GetView<ProfileController> {
   const ProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primaryColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildTopSection(context),
-            SafeArea(top: false, child: _buildBottomSection()),
-          ],
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Scaffold(
+          backgroundColor: AppColors.primaryColor,
+          body: Center(child: CircularProgressIndicator()),
+        );
+      }
+
+      return Scaffold(
+        backgroundColor: AppColors.primaryColor,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildTopSection(context, controller),
+              SafeArea(top: false, child: _buildBottomSection()),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
-Widget _buildTopSection(BuildContext context) {
+Widget _buildTopSection(BuildContext context, ProfileController controller) {
   return Container(
     color: AppColors.primaryColor,
     child: ClipRRect(
@@ -44,9 +57,9 @@ Widget _buildTopSection(BuildContext context) {
             const SizedBox(height: 16),
             _ProfileAvatar(),
             const SizedBox(height: 16),
-            _ProfileName(),
+            _ProfileName(controller: controller),
             const SizedBox(height: 6),
-            _ProfileSubtitle(),
+            _ProfileSubtitle(controller: controller),
             const SizedBox(height: 24),
             _EditProfileButton(),
           ],
@@ -127,29 +140,41 @@ class _ProfileAvatar extends StatelessWidget {
 }
 
 class _ProfileName extends StatelessWidget {
+  final ProfileController controller;
+
+  const _ProfileName({required this.controller});
+
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'Alya Putri',
-      style: TextStyle(
-        color: Color(0xFF7B2D8B),
-        fontSize: 22,
-        fontWeight: FontWeight.bold,
-        letterSpacing: 0.3,
+    return Obx(
+      () => Text(
+        controller.nama.value,
+        style: const TextStyle(
+          color: Color(0xFF7B2D8B),
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 0.3,
+        ),
       ),
     );
   }
 }
 
 class _ProfileSubtitle extends StatelessWidget {
+  final ProfileController controller;
+
+  const _ProfileSubtitle({required this.controller});
+
   @override
   Widget build(BuildContext context) {
-    return const Text(
-      'S1 Manajemen',
-      style: TextStyle(
-        color: Color(0xFF9C4DB8),
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
+    return Obx(
+      () => Text(
+        controller.pendidikan.value,
+        style: const TextStyle(
+          color: Color(0xFF9C4DB8),
+          fontSize: 14,
+          fontWeight: FontWeight.w400,
+        ),
       ),
     );
   }
@@ -163,7 +188,7 @@ class _EditProfileButton extends StatelessWidget {
       height: 44,
       child: ElevatedButton(
         onPressed: () {
-          // TODO: Navigate to edit profile page
+          Get.toNamed(Routes.EDITPROFILE);
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primaryColor,

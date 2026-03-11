@@ -120,7 +120,7 @@ class PersonalDataPage extends GetView<PersonalDataController> {
                           ? null
                           : () => controller.registerPersonalData(),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.primaryColor,
+                        backgroundColor: AppColors.whiteColor,
                         padding: EdgeInsets.symmetric(vertical: 10.h),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.r),
@@ -142,7 +142,7 @@ class PersonalDataPage extends GetView<PersonalDataController> {
                               style: TextStyle(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.whiteColor,
+                                color: AppColors.primaryColor,
                               ),
                             ),
                     ),

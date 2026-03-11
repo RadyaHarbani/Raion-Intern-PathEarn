@@ -4,6 +4,8 @@ import 'package:path_earn_app/features/auth/data/services/auth_gate.dart';
 import 'package:path_earn_app/features/auth/presentation/bindings/auth_binding.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/login_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/onboard_page.dart';
+import 'package:path_earn_app/features/home/presentation/bindings/profile_binding.dart';
+import 'package:path_earn_app/features/home/presentation/bindings/editprofile_binding.dart';
 import 'package:path_earn_app/features/home/presentation/pages/editprofile_page.dart';
 import 'package:path_earn_app/features/home/presentation/pages/profile_page.dart';
 import 'package:path_earn_app/features/lms/presentation/bindings/stage_binding.dart';
@@ -22,8 +24,6 @@ import 'app_routes.dart';
 
 class AppPages {
   static const INITIAL = Routes.SPLASH;
-
-  static const EDITPROFILE = Routes.EDITPROFILE;
 
   static final routes = [
     GetPage(
@@ -67,8 +67,16 @@ class AppPages {
         LoginBinding().dependencies();
       }),
     ),
-    GetPage(name: Routes.PROFILE, page: () => ProfilePage()),
-    GetPage(name: Routes.EDITPROFILE, page: () => EditProfilePage()),
+    GetPage(
+      name: Routes.PROFILE,
+      page: () => ProfilePage(),
+      binding: ProfileBinding(),
+    ),
+    GetPage(
+      name: Routes.EDITPROFILE,
+      page: () => EditProfilePage(),
+      binding: EditProfileBinding(),
+    ),
     GetPage(name: Routes.PREMIUM, page: () => PremiumPage()),
     GetPage(
       name: Routes.STAGE,

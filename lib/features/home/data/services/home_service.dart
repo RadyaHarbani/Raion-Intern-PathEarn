@@ -74,6 +74,43 @@ class HomeService {
     }
   }
 
+  Future<Map<String, dynamic>?> getProfileData(String userId) async {
+    final userResponse = await _supabase
+        .from('user')
+        .select('name, email, birth_date')
+        .eq('id', userId)
+        .maybeSingle();
+
+    if (userResponse == null) return null;
+
+    final docResponse = await _supabase
+        .from('user_documents')
+        .select('pendidikan_terakhir, jurusan')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+    return {...userResponse, ...?docResponse};
+  }
+
+  Future<void> updateProfile({
+    required String userId,
+    required String nama,
+    required String birthDate,
+    required String jurusan,
+  }) async {
+    // Update user table
+    await _supabase
+        .from('user')
+        .update({'name': nama, 'birth_date': birthDate})
+        .eq('id', userId);
+
+    // Update user_documents table - jurusan
+    await _supabase
+        .from('user_documents')
+        .update({'jurusan': jurusan})
+        .eq('user_id', userId);
+  }
+
   // Ambil ID tiap stage dari tabel lms_stages
   // Return: {'study_path': uuid, 'training_path': uuid, 'contribute_path': uuid}
   Future<Map<String, String>> getStageIds() async {
