@@ -5,6 +5,7 @@ abstract class Routes {
   static const ONBOARD = '/onboard';
   static const PERSONALDATA = '/personal-data';
   static const HOME = '/home';
+  static const PROFILE = '/profile';
   static const PREMIUM = '/premium';
   static const STAGE = '/stage';
   static const MATERIAL = '/material';

@@ -66,7 +66,7 @@ class HomeService {
           'user_id': userId,
           'course_type': 'contribute_path',
           'progress': 0.0,
-          'stage': 'Stage 1',
+          'stage': 'Stage 3',
           'status': 'Belum Dimulai',
           'is_locked': true,
         },

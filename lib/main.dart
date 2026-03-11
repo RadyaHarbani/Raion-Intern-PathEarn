@@ -5,6 +5,7 @@ import 'package:path_earn_app/core/themes/app_theme.dart';
 import 'package:path_earn_app/routes/app_pages.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'core/constants/secret_const.dart';
+import 'features/auth/data/services/idle_service.dart';
 
 void main() async {
   await Supabase.initialize(
@@ -12,6 +13,9 @@ void main() async {
     anonKey: SecretConst.supabaseAnonKey,
   );
   WidgetsFlutterBinding.ensureInitialized();
+
+  Get.put(IdleTimerService()..startTimer());
+
   runApp(const MyApp());
 }
 
@@ -25,16 +29,19 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return GetMaterialApp(
-          title: 'PathEarn App',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.lightTheme,
-          darkTheme: AppTheme.darkTheme,
-          themeMode: ThemeMode.system,
-          // initialBinding: InitialBinding(),
-          // TESTING SLICING PAGE
-          initialRoute: AppPages.INITIAL,
-          getPages: AppPages.routes,
+        return Listener(
+          onPointerDown: (_) => Get.find<IdleTimerService>().resetTimer(),
+          behavior: HitTestBehavior.translucent,
+          child: GetMaterialApp(
+            title: 'PathEarn App',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: ThemeMode.system,
+            // initialBinding: InitialBinding(),
+            initialRoute: AppPages.PROFILE,
+            getPages: AppPages.routes,
+          ),
         );
       },
     );

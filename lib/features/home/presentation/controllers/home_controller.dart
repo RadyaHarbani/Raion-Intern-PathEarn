@@ -107,12 +107,7 @@ class HomeController extends GetxController {
   Future<void> _fetchCourseProgress(String userId) async {
     final list = await _homeService.getCourseProgress(userId);
 
-    // Ambil stage IDs dari Supabase
-    final stageIds = await _homeService.getStageIds();
-    studyStageId.value = stageIds['study_path'] ?? '';
-    trainingStageId.value = stageIds['training_path'] ?? '';
-    contributeStageId.value = stageIds['contribute_path'] ?? '';
-
+    // Update progress dari Supabase
     for (final item in list) {
       final type = item['course_type'] as String;
       final double progress = (item['progress'] as num).toDouble();
@@ -141,6 +136,17 @@ class HomeController extends GetxController {
           break;
       }
     }
+
+    // Ambil stage IDs dari tabel lms_stages (optional - butuh SQL script dijalankan dulu)
+    // Wrapped try-catch supaya tidak crash jika tabel belum ada
+    try {
+      final stageIds = await _homeService.getStageIds();
+      studyStageId.value = stageIds['study_path'] ?? '';
+      trainingStageId.value = stageIds['training_path'] ?? '';
+      contributeStageId.value = stageIds['contribute_path'] ?? '';
+    } catch (_) {
+      // lms_stages belum dibuat, abaikan
+    }
   }
 
   void logout() async {
@@ -152,6 +158,7 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    _loadAll();
   }
 
   @override
