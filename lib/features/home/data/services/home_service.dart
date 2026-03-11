@@ -7,7 +7,7 @@ class HomeService {
   Future<Map<String, dynamic>?> getUserProfile(String userId) async {
     final response = await _supabase
         .from('user')
-        .select('name, energy, last_energy_restore')
+        .select('name, energy, last_energy_restore, is_premium')
         .eq('id', userId)
         .maybeSingle();
     return response;
@@ -66,11 +66,28 @@ class HomeService {
           'user_id': userId,
           'course_type': 'contribute_path',
           'progress': 0.0,
-          'stage': 'Stage 1',
+          'stage': 'Stage 3',
           'status': 'Belum Dimulai',
           'is_locked': true,
         },
       ]);
     }
+  }
+
+  // Ambil ID tiap stage dari tabel lms_stages
+  // Return: {'study_path': uuid, 'training_path': uuid, 'contribute_path': uuid}
+  Future<Map<String, String>> getStageIds() async {
+    final response = await _supabase
+        .from('lms_stages')
+        .select('id, order_num')
+        .order('order_num');
+
+    final list = List<Map<String, dynamic>>.from(response);
+    final Map<String, String> result = {};
+    const keys = ['study_path', 'training_path', 'contribute_path'];
+    for (int i = 0; i < list.length && i < keys.length; i++) {
+      result[keys[i]] = list[i]['id'] as String;
+    }
+    return result;
   }
 }

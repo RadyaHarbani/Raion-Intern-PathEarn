@@ -10,6 +10,7 @@ class HomeController extends GetxController {
 
   // --- User Profile ---
   RxString userName = 'Pengguna'.obs;
+  RxBool isPremium = false.obs;
 
   // --- Energy ---
   RxInt energy = 5.obs;
@@ -22,16 +23,19 @@ class HomeController extends GetxController {
   RxString studyStage = 'Stage 1'.obs;
   RxString studyStatus = 'Belum Dimulai'.obs;
   RxBool studyLocked = false.obs;
+  RxString studyStageId = ''.obs;
 
   RxDouble trainingProgress = 0.0.obs;
   RxString trainingStage = 'Stage 2'.obs;
   RxString trainingStatus = 'Belum Dimulai'.obs;
   RxBool trainingLocked = true.obs;
+  RxString trainingStageId = ''.obs;
 
   RxDouble contributeProgress = 0.0.obs;
   RxString contributeStage = 'Stage 1'.obs;
   RxString contributeStatus = 'Belum Dimulai'.obs;
   RxBool contributeLocked = true.obs;
+  RxString contributeStageId = ''.obs;
 
   Timer? _energyTimer;
 
@@ -55,6 +59,7 @@ class HomeController extends GetxController {
     if (data == null) return;
 
     userName.value = data['name'] ?? 'Pengguna';
+    isPremium.value = data['is_premium'] ?? false;
 
     final int savedEnergy = data['energy'] ?? maxEnergy;
     final String? lastRestoreStr = data['last_energy_restore'];
@@ -102,6 +107,7 @@ class HomeController extends GetxController {
   Future<void> _fetchCourseProgress(String userId) async {
     final list = await _homeService.getCourseProgress(userId);
 
+    // Update progress dari Supabase
     for (final item in list) {
       final type = item['course_type'] as String;
       final double progress = (item['progress'] as num).toDouble();
@@ -130,6 +136,17 @@ class HomeController extends GetxController {
           break;
       }
     }
+
+    // Ambil stage IDs dari tabel lms_stages (optional - butuh SQL script dijalankan dulu)
+    // Wrapped try-catch supaya tidak crash jika tabel belum ada
+    try {
+      final stageIds = await _homeService.getStageIds();
+      studyStageId.value = stageIds['study_path'] ?? '';
+      trainingStageId.value = stageIds['training_path'] ?? '';
+      contributeStageId.value = stageIds['contribute_path'] ?? '';
+    } catch (_) {
+      // lms_stages belum dibuat, abaikan
+    }
   }
 
   void logout() async {
@@ -141,6 +158,7 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    _loadAll();
   }
 
   @override

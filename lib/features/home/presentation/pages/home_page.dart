@@ -99,10 +99,10 @@ class HomePage extends GetView<HomeController> {
                                         ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(width: 8.w),
@@ -150,9 +150,18 @@ class HomePage extends GetView<HomeController> {
                     ],
                   ),
                   // Badge Placeholder
-                  SvgPicture.asset(
-                    "assets/images/premiumBadge.svg",
-                    height: 80.h,
+                  Obx(
+                    () => controller.isPremium.value
+                        ? SvgPicture.asset(
+                            "assets/images/premiumBadge.svg",
+                            height: 80.h,
+                            width: 80.w,
+                          )
+                        : SvgPicture.asset(
+                            "assets/images/unpremiumBadge.svg",
+                            height: 80.h,
+                            width: 80.w,
+                          ), // Empty placeholder for alignment
                   ),
                 ],
               ),
@@ -198,6 +207,7 @@ class HomePage extends GetView<HomeController> {
                   textColor: Colors.white,
                   progressColor: AppColors.secondaryColor,
                   isLocked: controller.studyLocked.value,
+                  stageId: controller.studyStageId.value,
                 ),
               ),
               SizedBox(height: 16.h),
@@ -211,6 +221,7 @@ class HomePage extends GetView<HomeController> {
                   textColor: Colors.white,
                   progressColor: Colors.grey[300]!,
                   isLocked: controller.trainingLocked.value,
+                  stageId: controller.trainingStageId.value,
                 ),
               ),
               SizedBox(height: 16.h),
@@ -220,10 +231,11 @@ class HomePage extends GetView<HomeController> {
                   stage: controller.contributeStage.value,
                   status: controller.contributeStatus.value,
                   progress: controller.contributeProgress.value,
-                  backgroundColor: const Color(0xFF555555), // Darker grey
+                  backgroundColor: const Color(0xFF555555),
                   textColor: Colors.white,
                   progressColor: Colors.grey[400]!,
                   isLocked: controller.contributeLocked.value,
+                  stageId: controller.contributeStageId.value,
                 ),
               ),
               SizedBox(height: 20.h),
@@ -243,11 +255,12 @@ class HomePage extends GetView<HomeController> {
     required Color textColor,
     required Color progressColor,
     required bool isLocked,
+    required String stageId,
   }) {
     return GestureDetector(
       onTap: () {
         if (!isLocked) {
-          Get.toNamed(Routes.STAGE);
+          Get.toNamed(Routes.STAGE, arguments: {'stage_id': stageId});
         }
       },
       child: Container(
