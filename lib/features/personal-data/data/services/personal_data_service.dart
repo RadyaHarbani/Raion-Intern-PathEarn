@@ -6,7 +6,7 @@ class PersonalDataService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
   Future<String> uploadFile(File file, String path) async {
-    final String fullPath = await _supabase.storage
+    await _supabase.storage
         .from('documents')
         .upload(
           path,

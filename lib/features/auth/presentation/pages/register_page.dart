@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
 import 'package:path_earn_app/routes/app_routes.dart';
 import 'package:path_earn_app/features/auth/presentation/controllers/register_controller.dart';
@@ -47,10 +48,10 @@ class RegisterPage extends GetView<RegisterController> {
                 decoration: BoxDecoration(
                   color: AppColors.whiteColor,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.r),
-                    topRight: Radius.circular(10.r),
-                    bottomLeft: Radius.circular(10.r),
-                    bottomRight: Radius.circular(10.r),
+                    topLeft: Radius.circular(20.r),
+                    topRight: Radius.circular(20.r),
+                    bottomLeft: Radius.circular(20.r),
+                    bottomRight: Radius.circular(20.r),
                   ),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 26.w, vertical: 24.h),
@@ -293,22 +294,25 @@ class RegisterPage extends GetView<RegisterController> {
                       ),
                     ),
                     SizedBox(height: 40.h),
-                    GetBuilder<RegisterController>(
-                      builder: (controller) => SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
+                    SizedBox(
+                      width: double.infinity,
+                      child: Obx(
+                        () => ElevatedButton(
                           onPressed:
-                              (controller.emailController.text.isEmpty ||
-                                  controller.passwordController.text.isEmpty ||
+                              (controller.emailController.text.isNotEmpty &&
+                                  controller
+                                      .passwordController
+                                      .text
+                                      .isNotEmpty &&
                                   controller
                                       .confirmPasswordController
                                       .text
-                                      .isEmpty)
-                              ? null
-                              : () => controller.register(),
+                                      .isNotEmpty)
+                              ? () => controller.register()
+                              : null,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primaryColor,
-                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            padding: EdgeInsets.symmetric(vertical: 15.h),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.r),
                             ),
@@ -316,13 +320,11 @@ class RegisterPage extends GetView<RegisterController> {
                           ),
                           child: controller.isLoading.value
                               ? SizedBox(
-                                  height: 20.h,
-                                  width: 20.h,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      AppColors.greyColor,
-                                    ),
-                                  ),
+                                  child:
+                                      LoadingAnimationWidget.staggeredDotsWave(
+                                        color: AppColors.whiteColor,
+                                        size: 23.sp,
+                                      ),
                                 )
                               : Text(
                                   'Daftar',

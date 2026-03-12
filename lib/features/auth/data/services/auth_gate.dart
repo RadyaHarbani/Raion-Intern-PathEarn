@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:path_earn_app/core/constants/app_colors.dart';
 import 'package:path_earn_app/features/home/presentation/pages/home_page.dart';
 import 'package:path_earn_app/features/auth/presentation/pages/login_page.dart';
 import 'package:path_earn_app/features/personal-data/data/services/personal_data_service.dart';
@@ -20,8 +23,14 @@ class AuthGate extends StatelessWidget {
       stream: Supabase.instance.client.auth.onAuthStateChange,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+          return Scaffold(
+            backgroundColor: Color(0xFFF5F0F6),
+            body: Center(
+              child: LoadingAnimationWidget.staggeredDotsWave(
+                color: AppColors.primaryColor,
+                size: 45.sp,
+              ),
+            ),
           );
         }
 
@@ -32,8 +41,14 @@ class AuthGate extends StatelessWidget {
             future: PersonalDataService().hasPersonalData(session.user.id),
             builder: (context, dataSnapshot) {
               if (dataSnapshot.connectionState == ConnectionState.waiting) {
-                return const Scaffold(
-                  body: Center(child: CircularProgressIndicator()),
+                return Scaffold(
+                  backgroundColor: Color(0xFFF5F0F6),
+                  body: Center(
+                    child: LoadingAnimationWidget.staggeredDotsWave(
+                      color: AppColors.primaryColor,
+                      size: 45.sp,
+                    ),
+                  ),
                 );
               }
 

@@ -123,6 +123,7 @@ class PersonalDataController extends GetxController {
       Get.snackbar('Sukses', 'Registrasi berhasil');
     } catch (e) {
       Get.snackbar('Error', 'Registrasi gagal: $e');
+      print(e.toString());
     } finally {
       isLoading.value = false;
     }

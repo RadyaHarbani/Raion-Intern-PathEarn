@@ -36,7 +36,7 @@ class PremiumPage extends StatelessWidget {
                   ),
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
+                      horizontal: 25,
                       vertical: 40,
                     ),
                     child: Column(
@@ -85,7 +85,7 @@ Widget _buildHeader(BuildContext context) {
       top: MediaQuery.of(context).padding.top + 16,
       left: 24,
       right: 0,
-      bottom: 24,
+      bottom: 29,
     ),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -102,11 +102,6 @@ Widget _buildHeader(BuildContext context) {
                 child: CircleAvatar(
                   radius: 26,
                   backgroundColor: AppColors.whiteColor.withValues(alpha: 0.3),
-                  child: const Icon(
-                    Icons.menu,
-                    color: AppColors.whiteColor,
-                    size: 30,
-                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -128,18 +123,11 @@ Widget _buildHeader(BuildContext context) {
                       ),
                     ),
                     TextSpan(
-                      text: '\nProfesional',
+                      text: '\nProfesional!',
                       style: AppTextStyle.tsHeadingLargeBold(
                         context,
                         AppColors.whiteColor,
-                      ),
-                    ),
-                    TextSpan(
-                      text: '!',
-                      style: AppTextStyle.tsHeadingLargeBold(
-                        context,
-                        AppColors.whiteColor,
-                      ),
+                      ).copyWith(height: .95),
                     ),
                   ],
                 ),

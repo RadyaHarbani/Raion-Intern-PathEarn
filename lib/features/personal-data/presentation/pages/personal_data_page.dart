@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
 import 'package:path_earn_app/core/constants/app_text_style.dart';
 import 'package:path_earn_app/features/personal-data/presentation/controllers/personal_data_controller.dart';
@@ -65,19 +66,19 @@ class PersonalDataPage extends GetView<PersonalDataController> {
                   children: [
                     _InputField(
                       label: 'Tahun Lulus',
-                      hint: '2025',
+                      hint: 'Cth : 2025',
                       controller: controller.yearController,
                     ),
                     SizedBox(height: 16.h),
                     _InputField(
                       label: 'Pendidikan Terakhir',
-                      hint: 'S1 / Sarjana',
+                      hint: 'Cth :S1 / Sarjana',
                       controller: controller.educationController,
                     ),
                     SizedBox(height: 16.h),
                     _InputField(
                       label: 'Jurusan',
-                      hint: 'Manajemen',
+                      hint: 'Cth : Manajemen',
                       controller: controller.majorController,
                     ),
                   ],
@@ -106,35 +107,33 @@ class PersonalDataPage extends GetView<PersonalDataController> {
                 SizedBox(height: 40.h),
 
                 /// Button Lanjut
-                GetBuilder<PersonalDataController>(
-                  builder: (controller) => SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
+                SizedBox(
+                  width: double.infinity,
+                  child: Obx(
+                    () => ElevatedButton(
                       onPressed:
-                          (controller.yearController.text.isEmpty ||
-                              controller.educationController.text.isEmpty ||
-                              controller.majorController.text.isEmpty ||
-                              controller.selectedCertificationFile.value ==
+                          (controller.yearController.text.isNotEmpty ||
+                              controller.educationController.text.isNotEmpty ||
+                              controller.majorController.text.isNotEmpty ||
+                              controller.selectedCertificationFile.value !=
                                   null ||
-                              controller.selectedCvFile.value == null)
-                          ? null
-                          : () => controller.registerPersonalData(),
+                              controller.selectedCvFile.value != null)
+                          ? () => controller.registerPersonalData()
+                          : null,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.whiteColor,
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
+                        padding: EdgeInsets.symmetric(vertical: 15.h),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.r),
                         ),
-                        disabledBackgroundColor: AppColors.primaryColor,
+
+                        disabledBackgroundColor: AppColors.greyColor,
                       ),
                       child: controller.isLoading.value
                           ? SizedBox(
-                              height: 20.h,
-                              width: 20.h,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppColors.greyColor,
-                                ),
+                              child: LoadingAnimationWidget.staggeredDotsWave(
+                                color: AppColors.primaryColor,
+                                size: 23.sp,
                               ),
                             )
                           : Text(
@@ -206,7 +205,7 @@ class _SectionCard extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: const Color(0xFFE9E4EA),
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(24.r),
       ),
       child: Column(

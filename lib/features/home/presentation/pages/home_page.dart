@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,7 +22,7 @@ class HomePage extends GetView<HomeController> {
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+          padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 20.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -141,11 +142,10 @@ class HomePage extends GetView<HomeController> {
                       Obx(
                         () => Text(
                           "${controller.userName.value}!",
-                          style: TextStyle(
-                            fontSize: 32.sp,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primaryColor,
-                          ),
+                          style: AppTextStyle.tsHeadingLargeBold(
+                            context,
+                            AppColors.primaryColor,
+                          ).copyWith(height: 0.8),
                         ),
                       ),
                     ],
@@ -169,31 +169,55 @@ class HomePage extends GetView<HomeController> {
               SizedBox(height: 32.h),
 
               // 3. Carousel Section
-              Container(
-                width: double.infinity,
-                height: 200.h,
-                decoration: BoxDecoration(
-                  color: Colors.grey[400], // Placeholder
-                  borderRadius: BorderRadius.circular(16.r),
+              CarouselSlider(
+                options: CarouselOptions(
+                  height: 200.h,
+                  viewportFraction: 1,
+                  autoPlay: true,
+                  autoPlayInterval: const Duration(seconds: 4),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  enlargeCenterPage: false,
+                  onPageChanged: (index, reason) {
+                    controller.currentBanner.value = index;
+                  },
                 ),
-              ),
-              SizedBox(height: 12.h),
-              // Dots Indicator
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(3, (index) {
+                items: controller.banners.map((imagePath) {
                   return Container(
-                    margin: EdgeInsets.symmetric(horizontal: 4.w),
-                    width: 8.w,
-                    height: 8.w,
+                    width: double.infinity,
+                    margin: EdgeInsets.symmetric(horizontal: 2.w),
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: index == 0
-                          ? AppColors.primaryColor
-                          : Colors.grey[300],
+                      borderRadius: BorderRadius.circular(16.r),
+                      image: DecorationImage(
+                        image: AssetImage(imagePath),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   );
-                }),
+                }).toList(),
+              ),
+
+              SizedBox(height: 12.h),
+              // Dots Indicator
+              Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(controller.banners.length, (index) {
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      margin: EdgeInsets.symmetric(horizontal: 4.w),
+                      width: controller.currentBanner.value == index
+                          ? 20.w
+                          : 8.w,
+                      height: 8.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.r),
+                        color: controller.currentBanner.value == index
+                            ? AppColors.primaryColor
+                            : Colors.grey[300],
+                      ),
+                    );
+                  }),
+                ),
               ),
               SizedBox(height: 32.h),
 
@@ -218,9 +242,9 @@ class HomePage extends GetView<HomeController> {
                   stage: controller.trainingStage.value,
                   status: controller.trainingStatus.value,
                   progress: controller.trainingProgress.value,
-                  backgroundColor: AppColors.greyColor,
+                  backgroundColor: AppColors.primaryColor,
                   textColor: Colors.white,
-                  progressColor: Colors.grey[300]!,
+                  progressColor: AppColors.secondaryColor,
                   isLocked: controller.trainingLocked.value,
                   stageId: controller.trainingStageId.value,
                 ),
@@ -232,9 +256,9 @@ class HomePage extends GetView<HomeController> {
                   stage: controller.contributeStage.value,
                   status: controller.contributeStatus.value,
                   progress: controller.contributeProgress.value,
-                  backgroundColor: const Color(0xFF555555),
+                  backgroundColor: AppColors.primaryColor,
                   textColor: Colors.white,
-                  progressColor: Colors.grey[400]!,
+                  progressColor: AppColors.secondaryColor,
                   isLocked: controller.contributeLocked.value,
                   stageId: controller.contributeStageId.value,
                 ),
@@ -274,7 +298,7 @@ class HomePage extends GetView<HomeController> {
         width: double.infinity,
         height: 190.h,
         decoration: BoxDecoration(
-          color: backgroundColor,
+          color: isLocked ? AppColors.greyColor : backgroundColor,
           borderRadius: BorderRadius.circular(16.r),
         ),
         child: Stack(
@@ -283,7 +307,13 @@ class HomePage extends GetView<HomeController> {
             Positioned(
               right: 0,
               top: 0,
-              child: SvgPicture.asset("assets/images/studyPath.svg"),
+              child: isLocked
+                  ? SizedBox.shrink()
+                  : title == "Study\nPath"
+                  ? SvgPicture.asset("assets/images/studyPath.svg")
+                  : title == "Training\nPath"
+                  ? SvgPicture.asset("assets/images/trainingPath.svg")
+                  : SvgPicture.asset("assets/images/contributePath.svg"),
             ),
 
             // Content
@@ -293,10 +323,12 @@ class HomePage extends GetView<HomeController> {
                 width: 340.w,
 
                 decoration: BoxDecoration(
-                  color: Color.alphaBlend(
-                    Colors.black.withOpacity(0.3),
-                    AppColors.primaryColor,
-                  ),
+                  color: isLocked
+                      ? AppColors.greyColor.withOpacity(0.8)
+                      : Color.alphaBlend(
+                          Colors.black.withOpacity(0.3),
+                          AppColors.primaryColor,
+                        ),
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(16.r),
                     bottomRight: Radius.circular(16.r),
@@ -331,10 +363,12 @@ class HomePage extends GetView<HomeController> {
                       Container(
                         height: 18.h,
                         decoration: BoxDecoration(
-                          color: Color.alphaBlend(
-                            AppColors.primaryColor.withOpacity(0.3),
-                            AppColors.whiteColor,
-                          ),
+                          color: isLocked
+                              ? AppColors.whiteColor.withOpacity(0.3)
+                              : Color.alphaBlend(
+                                  AppColors.primaryColor.withOpacity(0.3),
+                                  AppColors.whiteColor,
+                                ),
                           borderRadius: BorderRadius.circular(10.r),
                         ),
                         child: Stack(
