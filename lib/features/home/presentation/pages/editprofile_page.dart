@@ -1,55 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
+import '../controllers/editprofile_controller.dart';
 
-class EditProfilePage extends StatefulWidget {
+class EditProfilePage extends GetView<EditProfileController> {
   const EditProfilePage({super.key});
 
   @override
-  State<EditProfilePage> createState() => _EditProfilePageState();
-}
-
-class _EditProfilePageState extends State<EditProfilePage> {
-  final _formKey = GlobalKey<FormState>();
-
-  // late TextEditingController _namaController;
-  // late TextEditingController _emailController;
-  // late TextEditingController _tanggalLahirController;
-  // late TextEditingController _manajemenController;
-  // late TextEditingController _kataSandiController;
-
-  @override
-  void initState() {
-    super.initState();
-    // _namaController = TextEditingController();
-    // _emailController = TextEditingController();
-    // _tanggalLahirController = TextEditingController();
-    // _manajemenController = TextEditingController();
-    // _kataSandiController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    // _namaController.dispose();
-    // _emailController.dispose();
-    // _tanggalLahirController.dispose();
-    // _manajemenController.dispose();
-    // _kataSandiController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.primaryColor,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildHeader(context),
-            SafeArea(top: false, child: _buildFormSection()),
-          ],
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Scaffold(
+          backgroundColor: AppColors.primaryColor,
+          body: Center(child: CircularProgressIndicator()),
+        );
+      }
+
+      return Scaffold(
+        backgroundColor: AppColors.primaryColor,
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildHeader(context),
+              SafeArea(top: false, child: _buildFormSection(controller)),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildHeader(BuildContext context) {
@@ -126,13 +104,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildFormSection() {
+  Widget _buildFormSection(EditProfileController controller) {
     return Container(
       color: AppColors.primaryColor,
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
-          SizedBox(height: 40),
+          const SizedBox(height: 40),
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -146,51 +124,53 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ],
             ),
             padding: const EdgeInsets.all(20),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  _buildTextField(
-                    // controller: _namaController,
-                    label: 'Nama',
-                    icon: Icons.person_outline,
-                    hint: 'Nama',
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    // controller: _emailController,
-                    label: 'Email',
-                    icon: Icons.email_outlined,
-                    hint: 'Email',
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    // controller: _tanggalLahirController,
-                    label: 'Tanggal Lahir',
-                    icon: Icons.calendar_today_outlined,
-                    hint: 'Tanggal Lahir',
-                    isDate: true,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    // controller: _manajemenController,
-                    label: 'Manajemen',
-                    hint: 'Manajemen',
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    // controller: _kataSandiController,
-                    label: 'Kata Sandi',
-                    icon: Icons.lock_outline,
-                    hint: 'Masukkan kata sandi',
-                    isPassword: true,
-                  ),
-                ],
-              ),
+            child: Column(
+              children: [
+                _buildTextField(
+                  controller: controller.namaController,
+                  label: 'Nama',
+                  icon: Icons.person_outline,
+                  hint: 'Nama',
+                  enabled: true,
+                ),
+                const SizedBox(height: 16),
+                _buildTextField(
+                  controller: controller.emailController,
+                  label: 'Email',
+                  icon: Icons.email_outlined,
+                  hint: 'Email',
+                  enabled: false,
+                ),
+                const SizedBox(height: 16),
+                _buildTextField(
+                  controller: controller.tanggalLahirController,
+                  label: 'Tanggal Lahir',
+                  icon: Icons.calendar_today_outlined,
+                  hint: 'Tanggal Lahir',
+                  isDate: true,
+                  enabled: true,
+                ),
+                const SizedBox(height: 16),
+                _buildTextField(
+                  controller: controller.jurusanController,
+                  label: 'Jurusan',
+                  hint: 'Jurusan',
+                  enabled: true,
+                ),
+                const SizedBox(height: 16),
+                _buildTextField(
+                  controller: controller.passwordController,
+                  label: 'Kata Sandi',
+                  icon: Icons.lock_outline,
+                  hint: 'Masukkan kata sandi',
+                  isPassword: true,
+                  enabled: false,
+                ),
+              ],
             ),
           ),
           const SizedBox(height: 24),
-          _buildSimpanButton(),
+          Obx(() => _buildSimpanButton(controller)),
           const SizedBox(height: 20),
         ],
       ),
@@ -198,25 +178,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Widget _buildTextField({
-    // required TextEditingController controller,
+    required TextEditingController controller,
     required String label,
     required String hint,
     IconData? icon,
     bool isPassword = false,
     bool isDate = false,
+    bool enabled = true,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFormField(
-          // controller: controller,
+          controller: controller,
           obscureText: isPassword,
-          readOnly: isDate,
+          readOnly: isDate || !enabled,
+          enabled: enabled,
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: TextStyle(color: Colors.grey[400]),
             filled: true,
-            fillColor: Colors.grey[100],
+            fillColor: enabled ? Colors.grey[100] : Colors.grey[200],
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
@@ -244,13 +226,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
           onTap: isDate
               ? () async {
-                  final date = await showDatePicker(
-                    context: context,
+                  final pickedDate = await showDatePicker(
+                    context: Get.context!,
                     initialDate: DateTime.now(),
                     firstDate: DateTime(1980),
                     lastDate: DateTime.now(),
                   );
-                  // TODO: Tampilkan tanggal yang dipilih
+                  if (pickedDate != null) {
+                    controller.text =
+                        '${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}';
+                  }
                 }
               : null,
         ),
@@ -258,16 +243,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  Widget _buildSimpanButton() {
+  Widget _buildSimpanButton(EditProfileController controller) {
     return SizedBox(
       width: 160,
       height: 48,
       child: ElevatedButton(
-        onPressed: () {
-          if (_formKey.currentState!.validate()) {
-            // TODO: Implement save logic
-          }
-        },
+        onPressed: controller.isSaving.value
+            ? null
+            : () {
+                controller.simpanProfil();
+              },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
           foregroundColor: AppColors.primaryColor,
@@ -276,10 +261,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
           elevation: 2,
         ),
-        child: const Text(
-          'Simpan',
-          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
-        ),
+        child: controller.isSaving.value
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : const Text(
+                'Simpan',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              ),
       ),
     );
   }

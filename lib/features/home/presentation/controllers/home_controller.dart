@@ -5,6 +5,7 @@ import 'package:path_earn_app/features/home/data/services/home_service.dart';
 import 'package:path_earn_app/routes/app_routes.dart';
 
 class HomeController extends GetxController {
+  
   final AuthService _authService = AuthService();
   final HomeService _homeService = HomeService();
 

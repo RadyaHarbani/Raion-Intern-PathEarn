@@ -77,6 +77,21 @@ class AppDrawer extends StatelessWidget {
               }
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.person, color: AppColors.primaryColor),
+            title: Text(
+              'My Profile',
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+                color: AppColors.blackColor,
+              ),
+            ),
+            onTap: () {
+              Get.back(); // Close drawer
+              Get.toNamed(Routes.PROFILE);
+            },
+          ),
           const Spacer(),
           const Divider(),
           ListTile(
