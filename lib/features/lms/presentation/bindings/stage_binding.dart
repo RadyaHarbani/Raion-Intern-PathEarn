@@ -4,8 +4,6 @@ import '../controllers/stage_controller.dart';
 class StageBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<StageController>(
-      () => StageController(),
-    );
+    Get.put<StageController>(StageController());
   }
 }

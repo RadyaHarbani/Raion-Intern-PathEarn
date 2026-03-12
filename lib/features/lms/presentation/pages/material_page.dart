@@ -6,8 +6,21 @@ import 'package:path_earn_app/core/constants/app_text_style.dart';
 import 'package:path_earn_app/features/lms/presentation/controllers/material_controller.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-class MaterialPage extends GetView<MaterialController> {
+class MaterialPage extends StatefulWidget {
   const MaterialPage({super.key});
+
+  @override
+  State<MaterialPage> createState() => _MaterialPageState();
+}
+
+class _MaterialPageState extends State<MaterialPage> {
+  late MaterialController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<MaterialController>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,28 +47,62 @@ class MaterialPage extends GetView<MaterialController> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Text(
-                'Modul 1: Dasar Problem Solving di Dunia Kerja',
-                style: AppTextStyle.tsTitleLargeBold(
-                  context,
-                  AppColors.whiteColor,
+      body: Obx(() {
+        // Still loading
+        if (controller.isLoadingPdf.value) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(color: AppColors.whiteColor),
+                SizedBox(height: 16.h),
+                Text(
+                  'Menyiapkan PDF...',
+                  style: TextStyle(
+                    color: AppColors.whiteColor,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }
+
+        // PDF loaded
+        if (controller.signedPdfUrl.isNotEmpty) {
+          print('🔵 Loading PDF: ${controller.signedPdfUrl.value}');
+          return Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+                child: Text(
+                  controller.title,
+                  style: AppTextStyle.tsTitleLargeBold(
+                    context,
+                    AppColors.whiteColor,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 16.h),
-            Container(
-              height: 700.h,
-              child: SfPdfViewer.asset('assets/bahasaIndonesia.pdf'),
-            ),
-          ],
-        ),
-      ),
+              Expanded(
+                child: SfPdfViewer.network(
+                  controller.signedPdfUrl.value,
+                  onDocumentLoadFailed: (PdfDocumentLoadFailedDetails details) {
+                    print('❌ PDF Load Failed: ${details.error}');
+                  },
+                ),
+              ),
+            ],
+          );
+        }
+
+        // No PDF
+        return Center(
+          child: Text(
+            'Tidak ada PDF',
+            style: TextStyle(color: AppColors.whiteColor, fontSize: 16.sp),
+          ),
+        );
+      }),
     );
   }
 }

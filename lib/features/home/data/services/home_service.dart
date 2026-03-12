@@ -115,16 +115,44 @@ class HomeService {
   // Return: {'study_path': uuid, 'training_path': uuid, 'contribute_path': uuid}
   Future<Map<String, String>> getStageIds() async {
     final response = await _supabase
-        .from('lms_stages')
-        .select('id, order_num')
+        .from('lms_stage')
+        .select('id, order_num, title')
         .order('order_num');
 
+    print('📊 Raw response from lms_stage: $response');
+    print('📊 Response type: ${response.runtimeType}');
+
     final list = List<Map<String, dynamic>>.from(response);
+    print('📊 Parsed list: $list');
+
     final Map<String, String> result = {};
-    const keys = ['study_path', 'training_path', 'contribute_path'];
-    for (int i = 0; i < list.length && i < keys.length; i++) {
-      result[keys[i]] = list[i]['id'] as String;
+    
+    // Map berdasarkan order_num, bukan index
+    for (final stage in list) {
+      final orderNum = stage['order_num'] as int;
+      final id = stage['id'] as String;
+      final title = stage['title'] as String;
+      
+      String key = '';
+      switch (orderNum) {
+        case 1:
+          key = 'study_path';
+          break;
+        case 2:
+          key = 'training_path';
+          break;
+        case 3:
+          key = 'contribute_path';
+          break;
+      }
+      
+      if (key.isNotEmpty) {
+        result[key] = id;
+        print('📊 Mapped order_num=$orderNum ($title) -> $key = $id');
+      }
     }
+    
+    print('📊 Final result map: $result');
     return result;
   }
 }
