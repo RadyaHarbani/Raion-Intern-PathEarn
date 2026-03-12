@@ -5,7 +5,6 @@ import 'package:path_earn_app/features/home/data/services/home_service.dart';
 import 'package:path_earn_app/routes/app_routes.dart';
 
 class HomeController extends GetxController {
-  
   final AuthService _authService = AuthService();
   final HomeService _homeService = HomeService();
 
@@ -47,12 +46,24 @@ class HomeController extends GetxController {
   }
 
   Future<void> _loadAll() async {
+    print('🏠 _loadAll() started');
     final userId = _authService.getCurrentUserId();
-    if (userId == null) return;
+    print('🏠 userId: $userId');
+    if (userId == null) {
+      print('🏠 userId is null, returning');
+      return;
+    }
 
+    print('🏠 Calling initCourseProgressIfEmpty...');
     await _homeService.initCourseProgressIfEmpty(userId);
+
+    print('🏠 Calling _fetchUserProfile...');
     await _fetchUserProfile(userId);
+
+    print('🏠 Calling _fetchCourseProgress...');
     await _fetchCourseProgress(userId);
+
+    print('🏠 _loadAll() completed');
   }
 
   Future<void> _fetchUserProfile(String userId) async {
@@ -106,47 +117,66 @@ class HomeController extends GetxController {
   }
 
   Future<void> _fetchCourseProgress(String userId) async {
-    final list = await _homeService.getCourseProgress(userId);
-
-    // Update progress dari Supabase
-    for (final item in list) {
-      final type = item['course_type'] as String;
-      final double progress = (item['progress'] as num).toDouble();
-      final String stage = item['stage'] ?? 'Stage 1';
-      final String status = item['status'] ?? 'Belum Dimulai';
-      final bool locked = item['is_locked'] ?? true;
-
-      switch (type) {
-        case 'study_path':
-          studyProgress.value = progress;
-          studyStage.value = stage;
-          studyStatus.value = status;
-          studyLocked.value = locked;
-          break;
-        case 'training_path':
-          trainingProgress.value = progress;
-          trainingStage.value = stage;
-          trainingStatus.value = status;
-          trainingLocked.value = locked;
-          break;
-        case 'contribute_path':
-          contributeProgress.value = progress;
-          contributeStage.value = stage;
-          contributeStatus.value = status;
-          contributeLocked.value = locked;
-          break;
-      }
-    }
-
-    // Ambil stage IDs dari tabel lms_stages (optional - butuh SQL script dijalankan dulu)
-    // Wrapped try-catch supaya tidak crash jika tabel belum ada
     try {
-      final stageIds = await _homeService.getStageIds();
-      studyStageId.value = stageIds['study_path'] ?? '';
-      trainingStageId.value = stageIds['training_path'] ?? '';
-      contributeStageId.value = stageIds['contribute_path'] ?? '';
-    } catch (_) {
-      // lms_stages belum dibuat, abaikan
+      print('🔄 _fetchCourseProgress started for userId: $userId');
+
+      final list = await _homeService.getCourseProgress(userId);
+      print('🔄 getCourseProgress returned ${list.length} items');
+
+      // Update progress dari Supabase
+      for (final item in list) {
+        final type = item['course_type'] as String;
+        final double progress = (item['progress'] as num).toDouble();
+        final String stage = item['stage'] ?? 'Stage 1';
+        final String status = item['status'] ?? 'Belum Dimulai';
+        final bool locked = item['is_locked'] ?? true;
+
+        switch (type) {
+          case 'study_path':
+            studyProgress.value = progress;
+            studyStage.value = stage;
+            studyStatus.value = status;
+            studyLocked.value = locked;
+            break;
+          case 'training_path':
+            trainingProgress.value = progress;
+            trainingStage.value = stage;
+            trainingStatus.value = status;
+            trainingLocked.value = locked;
+            break;
+          case 'contribute_path':
+            contributeProgress.value = progress;
+            contributeStage.value = stage;
+            contributeStatus.value = status;
+            contributeLocked.value = locked;
+            break;
+        }
+      }
+      print('🔄 Progress data updated');
+
+      // Ambil stage IDs dari tabel lms_stage
+      try {
+        print('🔄 Fetching stage IDs...');
+        final stageIds = await _homeService.getStageIds();
+        print('✓ Stage IDs loaded: $stageIds');
+        studyStageId.value = stageIds['study_path'] ?? '';
+        trainingStageId.value = stageIds['training_path'] ?? '';
+        contributeStageId.value = stageIds['contribute_path'] ?? '';
+        print('✓ studyStageId: ${studyStageId.value}');
+        print('✓ trainingStageId: ${trainingStageId.value}');
+        print('✓ contributeStageId: ${contributeStageId.value}');
+      } catch (e) {
+        print('✗ Error loading stage IDs: $e');
+        print('✗ Stack trace: ${StackTrace.current}');
+        // Fallback: gunakan course_type sebagai stageId (temporary)
+        print('🔄 Using course_type as stageId fallback...');
+        studyStageId.value = 'study_path';
+        trainingStageId.value = 'training_path';
+        contributeStageId.value = 'contribute_path';
+      }
+    } catch (e) {
+      print('✗ Error in _fetchCourseProgress: $e');
+      print('✗ Stack: ${StackTrace.current}');
     }
   }
 

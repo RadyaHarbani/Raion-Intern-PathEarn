@@ -260,8 +260,14 @@ class HomePage extends GetView<HomeController> {
   }) {
     return GestureDetector(
       onTap: () {
+        print('🏠 Stage card tapped: $title');
+        print('🏠 stageId value: $stageId');
+        print('🏠 isLocked: $isLocked');
         if (!isLocked) {
+          print('🏠 Navigating to stage with stageId: $stageId');
           Get.toNamed(Routes.STAGE, arguments: {'stage_id': stageId});
+        } else {
+          print('🏠 Stage is locked, cannot navigate');
         }
       },
       child: Container(

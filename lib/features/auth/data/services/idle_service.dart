@@ -6,7 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class IdleTimerService extends GetxService {
   Timer? _idleTimer;
 
-  static const int idleMinutes = 15;
+  static const int idleMinutes = 60;
 
   void startTimer() {
     _idleTimer?.cancel();

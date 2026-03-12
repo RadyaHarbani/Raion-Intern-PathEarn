@@ -17,22 +17,45 @@ class StageController extends GetxController {
   void onInit() {
     super.onInit();
     stageId = Get.arguments?['stage_id'] as String? ?? '';
-    if (stageId.isNotEmpty) _loadStage();
+    print('🎯 Stage Controller initialized');
+    print('🎯 Arguments received: ${Get.arguments}');
+    print('🎯 Extract stageId: $stageId');
+    if (stageId.isNotEmpty) {
+      print('🎯 stageId is valid, loading stage...');
+      _loadStage();
+    } else {
+      print('🎯 ⚠️ stageId is EMPTY! Cannot load.');
+      isLoading.value = false;
+    }
   }
 
   Future<void> _loadStage() async {
     isLoading.value = true;
+    print('🔄 Starting _loadStage for stageId: $stageId');
     try {
       final userId = Supabase.instance.client.auth.currentUser?.id ?? '';
+      print('🔄 Current userId: $userId');
+
+      if (userId.isEmpty) {
+        print('✗ userId is empty!');
+        isLoading.value = false;
+        return;
+      }
+
       final result = await _lmsService.getStageWithProgress(
         stageId: stageId,
         userId: userId,
       );
+      print('✓ Stage loaded successfully: ${result.title}');
       stage.value = result;
     } catch (e) {
-      // Handle error jika perlu (snackbar dll.)
+      print('✗ Error loading stage: $e');
+      print('✗ Stack: ${StackTrace.current}');
+      // Set to null akan trigger "Data tidak ditemukan"
+      stage.value = null;
     } finally {
       isLoading.value = false;
+      print('✓ Loading complete. isLoading = ${isLoading.value}');
     }
   }
 
