@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
 import 'package:path_earn_app/routes/app_routes.dart';
 import '../controllers/profile_controller.dart';
@@ -12,9 +14,14 @@ class ProfilePage extends GetView<ProfileController> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.isLoading.value) {
-        return const Scaffold(
+        return Scaffold(
           backgroundColor: AppColors.primaryColor,
-          body: Center(child: CircularProgressIndicator()),
+          body: Center(
+            child: LoadingAnimationWidget.staggeredDotsWave(
+              color: AppColors.whiteColor,
+              size: 45.sp,
+            ),
+          ),
         );
       }
 

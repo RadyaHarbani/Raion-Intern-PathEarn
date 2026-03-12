@@ -39,6 +39,14 @@ class HomeController extends GetxController {
 
   Timer? _energyTimer;
 
+  final RxInt currentBanner = 0.obs;
+
+  final List<String> banners = [
+    "assets/carousels/carousel1.jpg",
+    "assets/carousels/carousel2.jpg",
+    "assets/carousels/carousel3.jpg",
+  ];
+
   @override
   void onInit() {
     super.onInit();
