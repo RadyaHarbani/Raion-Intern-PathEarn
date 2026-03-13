@@ -58,6 +58,22 @@ class MaterialController extends GetxController {
   /// Cari item video BERIKUTNYA di section yang sama
   Future<void> navigateToNextVideo() async {
     print('📄 🎥 Searching for next video item...');
+    print('📄 🎥   - sectionId: $sectionId');
+    print('📄 🎥   - orderNum: $orderNum');
+
+    // Check jika section_id atau order_num tidak valid
+    if (sectionId.isEmpty) {
+      print('⚠️ sectionId is empty, cannot search for next video');
+      Get.snackbar('Error', 'Section ID tidak ditemukan');
+      return;
+    }
+
+    if (orderNum == 0) {
+      print('⚠️ orderNum is 0, cannot search for next video');
+      Get.snackbar('Error', 'Order number tidak valid');
+      return;
+    }
+
     isSearchingNextVideo.value = true;
 
     try {
@@ -75,9 +91,15 @@ class MaterialController extends GetxController {
 
       if (result.isNotEmpty) {
         final videoData = result.first;
-        final nextVideoId = videoData['id'] as String;
-        final nextVideoTitle = videoData['title'] as String;
+        final nextVideoId = videoData['id'] as String?;
+        final nextVideoTitle = videoData['title'] as String?;
         final nextVideoUrl = videoData['video_url'] as String?;
+
+        if (nextVideoId == null || nextVideoTitle == null) {
+          print('⚠️ Video data is incomplete');
+          Get.snackbar('Error', 'Data video tidak lengkap');
+          return;
+        }
 
         print('📄 🎥 Found next video: $nextVideoTitle');
         print('📄 🎥 Video URL: $nextVideoUrl');
