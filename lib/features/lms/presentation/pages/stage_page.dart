@@ -168,7 +168,9 @@ class StagePage extends GetView<StageController> {
                           isCompleted: item.isCompleted,
                           isLast: isLast,
                           isLocked: isLocked,
-                          onTap: isLocked ? null : () => _navigateToItem(item),
+                          onTap: isLocked
+                              ? null
+                              : () => _navigateToItem(item, section),
                         );
                       }).toList(),
                     ),
@@ -183,7 +185,7 @@ class StagePage extends GetView<StageController> {
     );
   }
 
-  void _navigateToItem(LmsItem item) {
+  void _navigateToItem(LmsItem item, LmsSection section) {
     switch (item.itemType) {
       case 'material':
         Get.toNamed(
@@ -193,6 +195,8 @@ class StagePage extends GetView<StageController> {
             'title': item.title,
             'pdf_url': item.pdfUrl,
             'video_url': item.videoUrl,
+            'section_id': section.id,
+            'order_num': item.orderNum,
           },
         );
         break;
