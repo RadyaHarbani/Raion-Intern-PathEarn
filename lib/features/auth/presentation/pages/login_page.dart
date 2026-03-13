@@ -127,40 +127,42 @@ class LoginPage extends GetView<LoginController> {
                       SizedBox(height: 82.h),
                       SizedBox(
                         width: double.infinity,
-                        child: Obx(
-                          () => ElevatedButton(
-                            onPressed:
-                                (controller.emailController.text.isNotEmpty &&
-                                    controller
-                                        .passwordController
-                                        .text
-                                        .isNotEmpty)
-                                ? controller.login
-                                : null,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primaryColor,
-                              padding: EdgeInsets.symmetric(vertical: 15.h),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12.r),
+                        child: GetBuilder<LoginController>(
+                          builder: (_) => Obx(
+                            () => ElevatedButton(
+                              onPressed:
+                                  (controller.emailController.text.isNotEmpty &&
+                                      controller
+                                          .passwordController
+                                          .text
+                                          .isNotEmpty)
+                                  ? controller.login
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.primaryColor,
+                                padding: EdgeInsets.symmetric(vertical: 15.h),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                                disabledBackgroundColor: AppColors.greyColor,
                               ),
-                              disabledBackgroundColor: AppColors.greyColor,
-                            ),
-                            child: controller.isLoading.value
-                                ? SizedBox(
-                                    child:
-                                        LoadingAnimationWidget.staggeredDotsWave(
-                                          color: AppColors.whiteColor,
-                                          size: 23.sp,
-                                        ),
-                                  )
-                                : Text(
-                                    'Masuk',
-                                    style: TextStyle(
-                                      color: AppColors.whiteColor,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold,
+                              child: controller.isLoading.value
+                                  ? SizedBox(
+                                      child:
+                                          LoadingAnimationWidget.staggeredDotsWave(
+                                            color: AppColors.whiteColor,
+                                            size: 23.sp,
+                                          ),
+                                    )
+                                  : Text(
+                                      'Masuk',
+                                      style: TextStyle(
+                                        color: AppColors.whiteColor,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
+                            ),
                           ),
                         ),
                       ),

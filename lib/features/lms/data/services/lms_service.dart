@@ -74,7 +74,9 @@ class LmsService {
           ? []
           : await _supabase
                 .from('lms_items')
-                .select()
+                .select(
+                  'id, section_id, order_num, item_type, title, duration, pdf_url, video_url',
+                )
                 .inFilter('section_id', sectionIds)
                 .order('order_num');
       print('🔍 Items fetched: ${itemsData.length} items');
@@ -112,8 +114,19 @@ class LmsService {
         final sectionItems = itemsData
             .where((i) => i['section_id'] == sectionId)
             .map((itemData) {
+              print('🔍 Item raw data: $itemData');
+              print('🔍   - id: ${itemData['id']}');
+              print('🔍   - title: ${itemData['title']}');
+              print('🔍   - item_type: ${itemData['item_type']}');
+              print('🔍   - pdf_url: ${itemData['pdf_url']}');
+              print('🔍   - video_url: ${itemData['video_url']}');
+
               final item = LmsItem.fromMap(Map<String, dynamic>.from(itemData));
               item.isCompleted = completedItemIds.contains(item.id);
+
+              print(
+                '🔍 Mapped item: id=${item.id}, title=${item.title}, videoUrl=${item.videoUrl}',
+              );
               return item;
             })
             .toList();

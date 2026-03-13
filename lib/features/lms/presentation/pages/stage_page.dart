@@ -192,12 +192,13 @@ class StagePage extends GetView<StageController> {
             'item_id': item.id,
             'title': item.title,
             'pdf_url': item.pdfUrl,
+            'video_url': item.videoUrl,
           },
         );
         break;
       case 'video':
         Get.toNamed(
-          Routes.MATERIAL,
+          Routes.VIDEO,
           arguments: {
             'item_id': item.id,
             'title': item.title,

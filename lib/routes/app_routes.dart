@@ -10,6 +10,7 @@ abstract class Routes {
   static const PREMIUM = '/premium';
   static const STAGE = '/stage';
   static const MATERIAL = '/material';
+  static const VIDEO = '/video';
   static const QUIZ = '/quiz';
   static const SCORE = '/score';
 }

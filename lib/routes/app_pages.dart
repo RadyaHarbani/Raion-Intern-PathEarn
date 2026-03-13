@@ -15,6 +15,8 @@ import 'package:path_earn_app/features/auth/presentation/pages/register_page.dar
 import 'package:path_earn_app/features/auth/presentation/pages/splash_page.dart';
 import 'package:path_earn_app/features/lms/presentation/bindings/material_binding.dart';
 import 'package:path_earn_app/features/lms/presentation/pages/material_page.dart';
+import 'package:path_earn_app/features/lms/presentation/bindings/video_binding.dart';
+import 'package:path_earn_app/features/lms/presentation/pages/video_page.dart';
 import 'package:path_earn_app/features/personal-data/presentation/bindings/personal_data_binding.dart';
 import 'package:path_earn_app/features/personal-data/presentation/pages/personal_data_page.dart';
 import 'package:path_earn_app/features/home/presentation/bindings/home_binding.dart';
@@ -86,6 +88,11 @@ class AppPages {
       name: Routes.MATERIAL,
       page: () => MaterialPage(),
       binding: MaterialBinding(),
+    ),
+    GetPage(
+      name: Routes.VIDEO,
+      page: () => VideoPage(),
+      binding: VideoBinding(),
     ),
   ];
 }
