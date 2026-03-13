@@ -119,47 +119,50 @@ class _MaterialPageState extends State<MaterialPage> {
         child: SizedBox(
           width: double.infinity,
           height: 50.h,
-          child: ElevatedButton(
-            onPressed: () {
-              // Navigate ke video page
-              print('📄🎥 Navigating to VIDEO');
-              print('📄🎥   - itemId: ${controller.itemId}');
-              print('📄🎥   - title: ${controller.title}');
-              print('📄🎥   - videoUrl: ${controller.videoUrl}');
-
-              Get.toNamed(
-                Routes.VIDEO,
-                arguments: {
-                  'item_id': controller.itemId,
-                  'title': controller.title,
-                  'video_url': controller.videoUrl,
-                },
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primaryColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.r),
+          child: Obx(
+            () => ElevatedButton(
+              onPressed: controller.isSearchingNextVideo.value
+                  ? null
+                  : () => controller.navigateToNextVideo(),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Lanjut',
-                  style: TextStyle(
-                    color: AppColors.whiteColor,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(width: 8.w),
-                Icon(
-                  Icons.arrow_forward,
-                  color: AppColors.whiteColor,
-                  size: 20.sp,
-                ),
-              ],
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (controller.isSearchingNextVideo.value)
+                    SizedBox(
+                      width: 20.sp,
+                      height: 20.sp,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.whiteColor,
+                        ),
+                      ),
+                    )
+                  else
+                    Text(
+                      'Lanjut',
+                      style: TextStyle(
+                        color: AppColors.whiteColor,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  if (!controller.isSearchingNextVideo.value) ...[
+                    SizedBox(width: 8.w),
+                    Icon(
+                      Icons.arrow_forward,
+                      color: AppColors.whiteColor,
+                      size: 20.sp,
+                    ),
+                  ],
+                ],
+              ),
             ),
           ),
         ),
