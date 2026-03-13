@@ -3,25 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
 import 'package:path_earn_app/core/constants/app_text_style.dart';
-import 'package:path_earn_app/features/lms/presentation/controllers/material_controller.dart';
-import 'package:path_earn_app/routes/app_routes.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:path_earn_app/features/lms/presentation/controllers/video_controller.dart';
 
-class MaterialPage extends StatefulWidget {
-  const MaterialPage({super.key});
-
-  @override
-  State<MaterialPage> createState() => _MaterialPageState();
-}
-
-class _MaterialPageState extends State<MaterialPage> {
-  late MaterialController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = Get.find<MaterialController>();
-  }
+class VideoPage extends GetView<VideoController> {
+  const VideoPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +35,7 @@ class _MaterialPageState extends State<MaterialPage> {
       ),
       body: Obx(() {
         // Still loading
-        if (controller.isLoadingPdf.value) {
+        if (controller.isLoadingVideo.value) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +43,7 @@ class _MaterialPageState extends State<MaterialPage> {
                 CircularProgressIndicator(color: AppColors.whiteColor),
                 SizedBox(height: 16.h),
                 Text(
-                  'Menyiapkan PDF...',
+                  'Menyiapkan Video...',
                   style: TextStyle(
                     color: AppColors.whiteColor,
                     fontSize: 14.sp,
@@ -69,9 +54,9 @@ class _MaterialPageState extends State<MaterialPage> {
           );
         }
 
-        // PDF loaded
-        if (controller.signedPdfUrl.isNotEmpty) {
-          print('🔵 Loading PDF: ${controller.signedPdfUrl.value}');
+        // Video loaded
+        if (controller.signedVideoUrl.isNotEmpty) {
+          print('🎥 Loading Video: ${controller.signedVideoUrl.value}');
           return Column(
             children: [
               Padding(
@@ -85,21 +70,44 @@ class _MaterialPageState extends State<MaterialPage> {
                 ),
               ),
               Expanded(
-                child: SfPdfViewer.network(
-                  controller.signedPdfUrl.value,
-                  onDocumentLoadFailed: (PdfDocumentLoadFailedDetails details) {
-                    print('❌ PDF Load Failed: ${details.error}');
-                  },
+                child: Container(
+                  color: Colors.black,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.play_circle_fill,
+                          size: 80.sp,
+                          color: AppColors.primaryColor,
+                        ),
+                        SizedBox(height: 16.h),
+                        Text(
+                          'Video Player',
+                          style: TextStyle(
+                            color: AppColors.whiteColor,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                        SizedBox(height: 8.h),
+                        Text(
+                          'URL: ${controller.signedVideoUrl.value}',
+                          style: TextStyle(color: Colors.grey, fontSize: 12.sp),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],
           );
         }
 
-        // No PDF
+        // No Video
         return Center(
           child: Text(
-            'Tidak ada PDF',
+            'Tidak ada Video',
             style: TextStyle(color: AppColors.whiteColor, fontSize: 16.sp),
           ),
         );
@@ -121,20 +129,7 @@ class _MaterialPageState extends State<MaterialPage> {
           height: 50.h,
           child: ElevatedButton(
             onPressed: () {
-              // Navigate ke video page
-              print('📄🎥 Navigating to VIDEO');
-              print('📄🎥   - itemId: ${controller.itemId}');
-              print('📄🎥   - title: ${controller.title}');
-              print('📄🎥   - videoUrl: ${controller.videoUrl}');
-
-              Get.toNamed(
-                Routes.VIDEO,
-                arguments: {
-                  'item_id': controller.itemId,
-                  'title': controller.title,
-                  'video_url': controller.videoUrl,
-                },
-              );
+              controller.navigateToQuiz();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryColor,
@@ -146,7 +141,7 @@ class _MaterialPageState extends State<MaterialPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Lanjut',
+                  'Lanjut ke Kuis',
                   style: TextStyle(
                     color: AppColors.whiteColor,
                     fontSize: 16.sp,
