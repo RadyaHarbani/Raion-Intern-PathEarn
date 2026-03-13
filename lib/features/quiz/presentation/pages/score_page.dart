@@ -75,6 +75,7 @@ class ScorePage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const SizedBox(height: 50),
                         _buildScoreCard(context, quizResult),
                         const SizedBox(height: 20),
                         _buildStatCards(context, quizResult),

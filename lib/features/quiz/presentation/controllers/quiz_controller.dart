@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter/material.dart';
 import 'package:path_earn_app/features/quiz/data/models/question_model.dart';
 import 'package:path_earn_app/features/quiz/data/models/quiz_result_model.dart';
 import 'package:path_earn_app/features/quiz/data/services/quiz_service.dart';
+import 'package:path_earn_app/routes/app_routes.dart';
 
 class QuizController extends GetxController {
   final QuizService _quizService = QuizService();
@@ -23,7 +23,7 @@ class QuizController extends GetxController {
   RxBool isSubmitting = false.obs;
 
   // Quiz result
-  late QuizResult? quizResult;
+  QuizResult? quizResult;
 
   @override
   void onInit() {
@@ -165,35 +165,38 @@ class QuizController extends GetxController {
       final userId = _quizService.getCurrentUserId();
       if (userId == null) {
         Get.snackbar('Error', 'User not logged in');
-        isSubmitting.value = false;
         return;
       }
 
-      // Calculate results
-      quizResult = calculateResults();
+      if (questions.isEmpty) {
+        Get.snackbar('Error', 'Quiz belum siap, coba lagi');
+        return;
+      }
+
+      final result = calculateResults();
+      quizResult = result;
 
       // Save to database
-      await _quizService.saveQuizResult(userId, quizResult!);
+      await _quizService.saveQuizResult(userId, result);
 
       // Update user progress
       await _quizService.updateUserProgress(
         userId,
         stage.value,
         section.value,
-        quizResult!.scorePercentage,
+        result.scorePercentage,
       );
-
-      isSubmitting.value = false;
 
       // Navigate to score page with result
       Get.offNamed(
-        '/score',
-        arguments: {'quizResult': quizResult, 'questions': questions},
+        Routes.SCORE,
+        arguments: {'quizResult': result, 'questions': questions},
       );
     } catch (e) {
-      isSubmitting.value = false;
       Get.snackbar('Error', 'Failed to submit quiz: $e');
       print('Error submitting quiz: $e');
+    } finally {
+      isSubmitting.value = false;
     }
   }
 

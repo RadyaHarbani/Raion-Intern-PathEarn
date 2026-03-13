@@ -51,8 +51,10 @@ class QuizResult {
     required this.completedAt,
   });
 
-  int get scorePercentage =>
-      ((totalScore / (totalQuestions * 5)) * 100).toInt();
+  int get scorePercentage {
+    if (totalQuestions <= 0) return 0;
+    return ((totalScore / (totalQuestions * 5)) * 100).toInt();
+  }
 
   String get scoreLabel {
     if (scorePercentage >= 90) return 'Sempurna';
