@@ -20,6 +20,7 @@ import 'package:path_earn_app/features/lms/presentation/pages/video_page.dart';
 import 'package:path_earn_app/features/personal-data/presentation/bindings/personal_data_binding.dart';
 import 'package:path_earn_app/features/personal-data/presentation/pages/personal_data_page.dart';
 import 'package:path_earn_app/features/home/presentation/bindings/home_binding.dart';
+import 'package:path_earn_app/features/quiz/presentation/pages/quiz_page.dart';
 
 import 'app_routes.dart';
 
@@ -94,5 +95,6 @@ class AppPages {
       page: () => VideoPage(),
       binding: VideoBinding(),
     ),
+    GetPage(name: Routes.QUIZ, page: () => QuizPage()),
   ];
 }
