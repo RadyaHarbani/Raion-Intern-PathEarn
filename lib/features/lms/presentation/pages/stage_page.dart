@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
 import 'package:path_earn_app/features/lms/data/models/lms_models.dart';
 import 'package:path_earn_app/routes/app_routes.dart';
@@ -15,7 +16,12 @@ class StagePage extends GetView<StageController> {
       backgroundColor: const Color(0xFFF5F0F6),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return Center(
+            child: LoadingAnimationWidget.staggeredDotsWave(
+              color: AppColors.primaryColor,
+              size: 45.sp,
+            ),
+          );
         }
 
         final stage = controller.stage.value;
