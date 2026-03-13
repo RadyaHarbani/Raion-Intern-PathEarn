@@ -13,6 +13,7 @@ class RegisterController extends GetxController {
   RxBool isPasswordVisible = false.obs;
   RxBool isConfirmPasswordVisible = false.obs;
   RxBool isLoading = false.obs;
+  RxBool isFormValid = false.obs;
 
   RxString passwordError = ''.obs;
   RxString confirmPasswordError = ''.obs;
@@ -28,10 +29,14 @@ class RegisterController extends GetxController {
     nameController = TextEditingController();
     dateController = TextEditingController();
 
-    emailController.addListener(() => update());
+    emailController.addListener(() {
+      validateForm();
+      update();
+    });
 
     passwordController.addListener(() {
       _validatePasswordRealtime(passwordController.text);
+      validateForm();
       if (confirmPasswordController.text.isNotEmpty) {
         _validateConfirmPasswordRealtime(confirmPasswordController.text);
       }
@@ -40,6 +45,17 @@ class RegisterController extends GetxController {
 
     confirmPasswordController.addListener(() {
       _validateConfirmPasswordRealtime(confirmPasswordController.text);
+      validateForm();
+      update();
+    });
+
+    nameController.addListener(() {
+      validateForm();
+      update();
+    });
+
+    dateController.addListener(() {
+      validateForm();
       update();
     });
   }
@@ -60,6 +76,29 @@ class RegisterController extends GetxController {
 
   void toggleConfirmPasswordVisibility() {
     isConfirmPasswordVisible.value = !isConfirmPasswordVisible.value;
+  }
+
+  // Validate entire form
+  void validateForm() {
+    final email = emailController.text.trim();
+    final password = passwordController.text.trim();
+    final confirmPassword = confirmPasswordController.text.trim();
+    final name = nameController.text.trim();
+    final date = dateController.text.trim();
+
+    bool isValid =
+        email.isNotEmpty &&
+        validateEmail(email) &&
+        password.isNotEmpty &&
+        validatePassword(password) &&
+        confirmPassword.isNotEmpty &&
+        confirmPassword == password &&
+        passwordError.value.isEmpty &&
+        confirmPasswordError.value.isEmpty &&
+        name.isNotEmpty &&
+        date.isNotEmpty;
+
+    isFormValid.value = isValid;
   }
 
   bool validateEmail(String email) {
