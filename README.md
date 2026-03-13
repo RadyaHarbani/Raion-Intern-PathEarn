@@ -42,7 +42,6 @@ PathEarn adalah aplikasi mobile pembelajaran yang dirancang untuk membantu pengg
 ### 6. **Fitur Premium**
 
 - Akses konten premium eksklusif
-- Fitur-fitur canggih untuk pembelajaran mendalam
 
 ### 7. **Fitur Pendukung**
 
@@ -81,17 +80,7 @@ PathEarn adalah aplikasi mobile pembelajaran yang dirancang untuk membantu pengg
 - **Google Fonts** (^6.3.2) - Akses ke library font Google
 - **Flutter SVG** (^2.0.9) - Render dan manipulasi file SVG
 - **Carousel Slider** (^5.0.0) - Komponen carousel untuk slider gambar
-- **Loading Animation Widget** (^1.2.1) - Animasi loading yang menarik
-
-### **Utilities**
-
-- **Equatable** (^2.0.8) - Equality dan hash code generation
-- **intl** (^0.20.2) - Internationalization dan localization
-- **Path Provider** (^2.1.5) - Akses direktori aplikasi
-- **File Picker** (^8.0.1) - Dialog pemilihan file
-- **WebView Flutter** (^4.2.0) - WebView untuk menampilkan konten web
-- **URL Launcher** (^6.2.0) - Membuka URL eksternal
-- **Syncfusion Flutter PDF Viewer** (^31.1.19) - Viewer PDF terintegrasi
+- **Loading Animation Widget** (^1.2.1) - Animasi loading yang menarik 
 
 ### **Development Tools**
 
