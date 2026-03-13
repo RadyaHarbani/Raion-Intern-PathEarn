@@ -21,6 +21,7 @@ import 'package:path_earn_app/features/personal-data/presentation/bindings/perso
 import 'package:path_earn_app/features/personal-data/presentation/pages/personal_data_page.dart';
 import 'package:path_earn_app/features/home/presentation/bindings/home_binding.dart';
 import 'package:path_earn_app/features/quiz/presentation/pages/quiz_page.dart';
+import 'package:path_earn_app/features/quiz/presentation/pages/score_page.dart';
 
 import 'app_routes.dart';
 
@@ -96,5 +97,6 @@ class AppPages {
       binding: VideoBinding(),
     ),
     GetPage(name: Routes.QUIZ, page: () => QuizPage()),
+    GetPage(name: Routes.SCORE, page: () => ScorePage()),
   ];
 }

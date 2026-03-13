@@ -48,12 +48,24 @@ class QuizService {
     int scorePercentage,
   ) async {
     try {
-      // Update user_course_progress table
-      await _supabase.from('user_course_progress').upsert({
+      final String courseType = switch (stage) {
+        1 => 'study_path',
+        2 => 'training_path',
+        3 => 'contribute_path',
+        _ => 'study_path',
+      };
+
+      final double progress =
+          (scorePercentage / 100.0).clamp(0.0, 1.0).toDouble();
+      final String status = progress >= 1.0 ? 'Selesai' : 'Sedang Berjalan';
+
+      await _supabase.from('user_course_progress').update({
+        'progress': progress,
+        'stage': 'Stage $stage',
+        'status': status,
+      }).match({
         'user_id': userId,
-        'stage': stage,
-        'section': section,
-        'progress': scorePercentage,
+        'course_type': courseType,
       });
     } catch (e) {
       // Log error but don't throw - just silent fail
