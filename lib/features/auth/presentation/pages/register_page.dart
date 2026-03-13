@@ -299,15 +299,8 @@ class RegisterPage extends GetView<RegisterController> {
                       child: Obx(
                         () => ElevatedButton(
                           onPressed:
-                              (controller.emailController.text.isNotEmpty &&
-                                  controller
-                                      .passwordController
-                                      .text
-                                      .isNotEmpty &&
-                                  controller
-                                      .confirmPasswordController
-                                      .text
-                                      .isNotEmpty)
+                              controller.isFormValid.value &&
+                                  !controller.isLoading.value
                               ? () => controller.register()
                               : null,
                           style: ElevatedButton.styleFrom(

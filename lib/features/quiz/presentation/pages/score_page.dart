@@ -1,24 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
 import 'package:path_earn_app/core/constants/app_text_style.dart';
+import 'package:path_earn_app/features/quiz/data/models/quiz_result_model.dart';
 
 class ScorePage extends StatelessWidget {
   const ScorePage({super.key});
 
-  /// TEST HARDCODE
-  /// Disesuaikan dengan backend
-  static const String userName = 'Alya';
-  static const String scoreLabel = 'Sempurna';
-  static const String sectionTitle = 'Quiz - Section 1';
-  static const int score = 95;
-  static const int correctCount = 19;
-  static const int wrongCount = 1;
-  static const int emptyCount = 0;
-  static const int totalQuestion = 20;
-
   @override
   Widget build(BuildContext context) {
+    // Get quiz result from arguments
+    final quizResult = Get.arguments?['quizResult'] as QuizResult?;
+
+    if (quizResult == null) {
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Data tidak ditemukan'),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => Get.back(),
+                child: const Text('Kembali'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: Stack(
@@ -26,7 +38,6 @@ class ScorePage extends StatelessWidget {
           Positioned(
             top: 100,
             left: 90,
-            // right: 0,
             child: Opacity(
               opacity: 0.95,
               child: SvgPicture.asset(
@@ -45,7 +56,7 @@ class ScorePage extends StatelessWidget {
                   children: [
                     _buildAppBar(context),
                     const SizedBox(height: 240),
-                    _buildHeadingText(context),
+                    _buildHeadingText(context, quizResult),
                   ],
                 ),
               ),
@@ -60,15 +71,15 @@ class ScorePage extends StatelessWidget {
                     ),
                   ),
                   child: SingleChildScrollView(
-                    padding: EdgeInsets.fromLTRB(24, 28, 24, 100),
+                    padding: const EdgeInsets.fromLTRB(24, 28, 24, 100),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildScoreCard(context),
-                        SizedBox(height: 20),
-                        _buildStatCards(context),
-                        SizedBox(height: 24),
-                        _buildLihatPembahasan(context),
+                        _buildScoreCard(context, quizResult),
+                        const SizedBox(height: 20),
+                        _buildStatCards(context, quizResult),
+                        const SizedBox(height: 24),
+                        _buildAnswerSummary(context, quizResult),
                       ],
                     ),
                   ),
@@ -93,7 +104,7 @@ class ScorePage extends StatelessWidget {
       child: Row(
         children: [
           GestureDetector(
-            onTap: () => Navigator.pop(context),
+            onTap: () => Get.back(),
             child: const Icon(
               Icons.chevron_left,
               size: 28,
@@ -117,14 +128,14 @@ class ScorePage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeadingText(BuildContext context) {
+  Widget _buildHeadingText(BuildContext context, QuizResult result) {
     return Padding(
       padding: const EdgeInsets.only(left: 24, right: 24, bottom: 32),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Hebat $userName! $scoreLabel',
+            'Hebat! ${result.scoreLabel}',
             style: AppTextStyle.tsHeadingSmallBold(
               context,
               AppColors.whiteColor,
@@ -132,7 +143,7 @@ class ScorePage extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            sectionTitle,
+            'Quiz - Stage ${result.stage} Section ${result.section}',
             style: AppTextStyle.tsBodyMediumRegular(
               context,
               AppColors.whiteColor,
@@ -143,9 +154,9 @@ class ScorePage extends StatelessWidget {
     );
   }
 
-  Widget _buildScoreCard(BuildContext context) {
+  Widget _buildScoreCard(BuildContext context, QuizResult result) {
     return Transform.translate(
-      offset: Offset(0, -55),
+      offset: const Offset(0, -55),
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -163,12 +174,24 @@ class ScorePage extends StatelessWidget {
                 AppColors.whiteColor,
               ),
             ),
-            Text(
-              '$score',
-              style: AppTextStyle.tsBodyLargeBold(
-                context,
-                AppColors.whiteColor,
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  '${result.totalScore}/${result.totalQuestions * 5}',
+                  style: AppTextStyle.tsBodyLargeBold(
+                    context,
+                    AppColors.whiteColor,
+                  ),
+                ),
+                Text(
+                  '${result.scorePercentage}%',
+                  style: AppTextStyle.tsBodyMediumRegular(
+                    context,
+                    AppColors.whiteColor,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -176,9 +199,9 @@ class ScorePage extends StatelessWidget {
     );
   }
 
-  Widget _buildStatCards(BuildContext context) {
+  Widget _buildStatCards(BuildContext context, QuizResult result) {
     return Transform.translate(
-      offset: Offset(0, -55),
+      offset: const Offset(0, -55),
       child: Row(
         children: [
           Expanded(
@@ -186,8 +209,8 @@ class ScorePage extends StatelessWidget {
               context,
               icon: Icons.check,
               iconColor: const Color(0xFF5A9352),
-              count: correctCount,
-              total: totalQuestion,
+              count: result.correctCount,
+              total: result.totalQuestions,
               countColor: const Color(0xFF5A9352),
               label: 'Benar',
               labelBg: const Color(0xFF5A9352),
@@ -199,8 +222,8 @@ class ScorePage extends StatelessWidget {
               context,
               icon: Icons.close,
               iconColor: const Color(0xFFBE5656),
-              count: wrongCount,
-              total: totalQuestion,
+              count: result.wrongCount,
+              total: result.totalQuestions,
               countColor: const Color(0xFFBE5656),
               label: 'Salah',
               labelBg: const Color(0xFFBE5656),
@@ -212,8 +235,8 @@ class ScorePage extends StatelessWidget {
               context,
               icon: Icons.remove,
               iconColor: AppColors.blackColor,
-              count: emptyCount,
-              total: totalQuestion,
+              count: result.emptyCount,
+              total: result.totalQuestions,
               countColor: AppColors.blackColor,
               label: 'Kosong',
               labelBg: AppColors.blackColor,
@@ -259,7 +282,6 @@ class ScorePage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Icon(icon, color: iconColor, size: 24),
                 const SizedBox(height: 32),
                 RichText(
                   text: TextSpan(
@@ -307,30 +329,93 @@ class ScorePage extends StatelessWidget {
     );
   }
 
-  Widget _buildLihatPembahasan(BuildContext context) {
+  Widget _buildAnswerSummary(BuildContext context, QuizResult result) {
     return Transform.translate(
-      offset: Offset(0, -55),
-      child: GestureDetector(
-        onTap: () {
-          // TODO: navigasi ke halaman pembahasan
-        },
-        child: Row(
-          children: [
-            const Icon(
-              Icons.chevron_left,
-              size: 20,
-              color: AppColors.blackColor,
-            ),
-            const SizedBox(width: 4),
-            Text(
-              'Lihat Pembahasan',
-              style: AppTextStyle.tsBodyMediumRegular(
-                context,
-                AppColors.blackColor,
+      offset: const Offset(0, -55),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Ringkasan Jawaban',
+            style: AppTextStyle.tsBodyLargeBold(context, AppColors.blackColor),
+          ),
+          const SizedBox(height: 12),
+          ...List.generate(result.answers.length, (index) {
+            final answer = result.answers[index];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.whiteColor,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: answer.isCorrect
+                        ? const Color(0xFF5A9352)
+                        : const Color(0xFFBE5656),
+                    width: 1.5,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      answer.isCorrect ? Icons.check : Icons.close,
+                      color: answer.isCorrect
+                          ? const Color(0xFF5A9352)
+                          : const Color(0xFFBE5656),
+                      size: 20,
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Soal ${index + 1}',
+                            style: AppTextStyle.tsBodySmallBold(
+                              context,
+                              AppColors.blackColor,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            answer.isCorrect
+                                ? 'Jawaban Benar'
+                                : 'Jawaban Salah',
+                            style: AppTextStyle.tsBodySmallRegular(
+                              context,
+                              answer.isCorrect
+                                  ? const Color(0xFF5A9352)
+                                  : const Color(0xFFBE5656),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (answer.isCorrect)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF5A9352),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Text(
+                          '+${answer.earnedPoints}',
+                          style: AppTextStyle.tsBodySmallBold(
+                            context,
+                            AppColors.whiteColor,
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            );
+          }),
+        ],
       ),
     );
   }
@@ -342,7 +427,7 @@ class ScorePage extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            // TODO: navigasi ke halaman pembelajaran
+            Get.back();
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFBCAD3E),
@@ -354,18 +439,17 @@ class ScorePage extends StatelessWidget {
             ),
           ),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(width: 32),
               Text(
-                'Lanjutkan Pembelajaran',
+                'Ke Beranda',
                 style: AppTextStyle.tsBodyLargeBold(
                   context,
                   AppColors.whiteColor,
                 ),
               ),
-              const SizedBox(width: 64),
-              const Icon(Icons.chevron_right, size: 20),
+              const SizedBox(width: 8),
+              const Icon(Icons.home, size: 20),
             ],
           ),
         ),

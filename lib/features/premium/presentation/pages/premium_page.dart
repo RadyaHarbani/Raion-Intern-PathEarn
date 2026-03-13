@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
 import 'package:path_earn_app/core/constants/app_text_style.dart';
 import 'package:path_earn_app/core/widgets/app_drawer.dart';
+import 'package:path_earn_app/features/premium/presentation/controllers/premium_controller.dart';
 
 class PremiumPage extends StatelessWidget {
   const PremiumPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Initialize PremiumController
+    final controller = Get.put(PremiumController());
+
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       drawer: const AppDrawer(),
@@ -39,34 +45,42 @@ class PremiumPage extends StatelessWidget {
                       horizontal: 25,
                       vertical: 40,
                     ),
-                    child: Column(
-                      children: [
-                        _buildPremiumCard(
-                          context: context,
-                          gradientColors: [
-                            Color(0xFFFFA800),
-                            Color(0xFFFAE653),
-                          ],
-                          price: '29.000/Bulan',
-                          border: Border.all(
-                            color: Color(0xFFBCA605),
-                            width: 2,
+                    child: Obx(
+                      () => Column(
+                        children: [
+                          _buildPremiumCard(
+                            context: context,
+                            gradientColors: [
+                              Color(0xFFFFA800),
+                              Color(0xFFFAE653),
+                            ],
+                            price: '29.000/Bulan',
+                            border: Border.all(
+                              color: Color(0xFFBCA605),
+                              width: 2,
+                            ),
+                            onTap: () => controller.upgradeToPremium(),
+                            isLoading: controller.isLoading.value,
+                            isPremium: controller.isPremium.value,
                           ),
-                        ),
-                        const SizedBox(height: 24),
-                        _buildPremiumCard(
-                          context: context,
-                          gradientColors: [
-                            Color(0xFF8D5293),
-                            Color(0xFFCD93D8),
-                          ],
-                          price: '280.000/3 Bulan',
-                          border: Border.all(
-                            color: Color(0xFF8F05BC),
-                            width: 2,
+                          const SizedBox(height: 24),
+                          _buildPremiumCard(
+                            context: context,
+                            gradientColors: [
+                              Color(0xFF8D5293),
+                              Color(0xFFCD93D8),
+                            ],
+                            price: '280.000/3 Bulan',
+                            border: Border.all(
+                              color: Color(0xFF8F05BC),
+                              width: 2,
+                            ),
+                            onTap: () => controller.upgradeToPremium(),
+                            isLoading: controller.isLoading.value,
+                            isPremium: controller.isPremium.value,
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -154,6 +168,9 @@ Widget _buildPremiumCard({
   required List<Color> gradientColors,
   required String price,
   Border? border,
+  required VoidCallback onTap,
+  required bool isLoading,
+  required bool isPremium,
 }) {
   final features = [
     'Unlimited Battery',
@@ -175,9 +192,36 @@ Widget _buildPremiumCard({
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Premium',
-          style: AppTextStyle.tsTitleLargeBold(context, AppColors.whiteColor),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Premium',
+              style: AppTextStyle.tsTitleLargeBold(
+                context,
+                AppColors.whiteColor,
+              ),
+            ),
+            // Badge to show premium status
+            if (isPremium)
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.whiteColor,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Text(
+                  'PREMIUM',
+                  style: AppTextStyle.tsBodySmallBold(
+                    context,
+                    AppColors.primaryColor,
+                  ),
+                ),
+              ),
+          ],
         ),
         const SizedBox(height: 20),
         // feature list
@@ -200,27 +244,41 @@ Widget _buildPremiumCard({
           ),
         ),
         const SizedBox(height: 23),
-        // price button
+        // price button with loading
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: isPremium ? null : (isLoading ? null : onTap),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.whiteColor,
+              backgroundColor: isPremium
+                  ? AppColors.whiteColor.withValues(alpha: 0.5)
+                  : AppColors.whiteColor,
               foregroundColor: AppColors.primaryColor,
+              disabledBackgroundColor: AppColors.whiteColor.withValues(
+                alpha: 0.5,
+              ),
               padding: const EdgeInsets.symmetric(vertical: 14),
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: Text(
-              price,
-              style: AppTextStyle.tsBodyLargeBold(
-                context,
-                AppColors.primaryColor,
-              ),
-            ),
+            child: isLoading
+                ? LoadingAnimationWidget.discreteCircle(
+                    size: 20,
+                    secondRingColor: AppColors.primaryColor,
+                    thirdRingColor: AppColors.primaryColor.withValues(
+                      alpha: 0.5,
+                    ),
+                    color: AppColors.primaryColor,
+                  )
+                : Text(
+                    isPremium ? 'Sudah Premium' : price,
+                    style: AppTextStyle.tsBodyLargeBold(
+                      context,
+                      AppColors.primaryColor,
+                    ),
+                  ),
           ),
         ),
       ],
