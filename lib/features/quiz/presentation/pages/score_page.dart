@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:path_earn_app/core/constants/app_colors.dart';
 import 'package:path_earn_app/core/constants/app_text_style.dart';
 import 'package:path_earn_app/features/quiz/data/models/quiz_result_model.dart';
+import 'package:path_earn_app/routes/app_routes.dart';
 
 class ScorePage extends StatelessWidget {
   const ScorePage({super.key});
@@ -428,7 +429,7 @@ class ScorePage extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            Get.back();
+            Get.toNamed(Routes.STAGE);
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFBCAD3E),
