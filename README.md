@@ -14,7 +14,7 @@ PathEarn adalah aplikasi mobile pembelajaran yang dirancang untuk membantu pengg
 
 ### 2. **Dashboard & Home**
 
-- Tampilan dashboard yang menyajikan ringkasan pembelajaran
+- Tampilan dashboard
 - Navigasi mudah ke berbagai fitur aplikasi
 - Carousel banner promosi dan informasi penting
 
@@ -31,7 +31,6 @@ PathEarn adalah aplikasi mobile pembelajaran yang dirancang untuk membantu pengg
 - Mengikuti berbagai kuis pembelajaran
 - Sistem penilaian otomatis
 - Menampilkan hasil dan skor kuis
-- Analisis performa pembelajaran
 
 ### 5. **Manajemen Data Pribadi**
 
