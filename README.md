@@ -37,7 +37,6 @@ PathEarn adalah aplikasi mobile pembelajaran yang dirancang untuk membantu pengg
 
 - Melihat dan mengedit profil pengguna
 - Menyimpan informasi pribadi
-- Manajemen password
 
 ### 6. **Fitur Premium**
 
@@ -47,7 +46,6 @@ PathEarn adalah aplikasi mobile pembelajaran yang dirancang untuk membantu pengg
 
 - Pembuka link eksternal (URL Launcher)
 - Pemilih file untuk upload materi
-- WebView untuk konten web di dalam aplikasi
 - Carousel slider untuk presentasi konten
 
 ---
@@ -65,22 +63,17 @@ PathEarn adalah aplikasi mobile pembelajaran yang dirancang untuk membantu pengg
   **GetX digunakan untuk:**
   - **Reactive State Management** - Mengupdate UI secara otomatis ketika state berubah
   - **Route Navigation** - Navigasi antar halaman dengan routing yang powerful
-  - **Dependency Injection** - Registrasi dan akses service/controller dengan mudah
-  - **Event Handling** - Penanganan event global dan komunikasi antar komponen
-  - **Performance** - Konsumsi memori lebih rendah dibanding provider atau bloc
 
 ### **Backend & Database**
 
 - **Supabase** (^2.12.0) - Backend-as-a-Service dengan PostgreSQL, autentikasi, dan real-time database
-- **Dio** (^5.9.1) - HTTP client untuk komunikasi dengan API
 
 ### **UI & Design**
 
-- **Flutter ScreenUtil** (^5.9.3) - Responsive design dan adaptive layout
 - **Google Fonts** (^6.3.2) - Akses ke library font Google
 - **Flutter SVG** (^2.0.9) - Render dan manipulasi file SVG
 - **Carousel Slider** (^5.0.0) - Komponen carousel untuk slider gambar
-- **Loading Animation Widget** (^1.2.1) - Animasi loading yang menarik 
+- **Loading Animation Widget** (^1.2.1) - Animasi loading yang menarik
 
 ### **Development Tools**
 
@@ -270,36 +263,6 @@ adb start-server
 ```
 
 ---
-
-## 📝 Catatan Pengembangan
-
-### State Management dengan GetX
-
-- **Reactive Variables**: Setiap state yang perlu di-observe menggunakan `.obs`
-
-  ```dart
-  class AuthController extends GetxController {
-    var isLoading = false.obs;
-    var userName = ''.obs;
-
-    void login() {
-      isLoading.value = true;  // Update state
-      // UI akan auto-update ketika isLoading berubah
-    }
-  }
-  ```
-
-- **Obx Widget**: Membungkus widget yang perlu reactive update
-
-  ```dart
-  Obx(() => Text(authController.userName.value))
-  ```
-
-- **Dependency Injection**: Registrasi controller di awal aplikasi
-  ```dart
-  Get.put(AuthController());
-  // Akses dari mana saja: Get.find<AuthController>()
-  ```
 
 ### Fitur Tambahan
 
