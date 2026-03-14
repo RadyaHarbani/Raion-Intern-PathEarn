@@ -264,15 +264,6 @@ adb start-server
 
 ---
 
-### Fitur Tambahan
-
-- Aplikasi menggunakan **Supabase** sebagai backend
-- UI responsive menggunakan **ScreenUtil**
-- Idle timer diimplementasikan untuk security
-- Custom theme support dengan light dan dark mode
-
----
-
 ## 📚 Referensi
 
 - [Flutter Documentation](https://docs.flutter.dev/)
